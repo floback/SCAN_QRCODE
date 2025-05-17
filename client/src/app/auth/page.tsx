@@ -51,7 +51,7 @@ export default function LoginPage() {
         className="bg-white p-10 w-130 rounded-3xl border shadow-lg"
       >
         <div className="mb-8 text-center">
-        <h2 className="text-4xl font-bold text-zinc-700 font-sans">Login</h2> 
+          <h2 className="text-4xl font-bold text-zinc-700 font-sans">Login</h2>
         </div>
 
         {error && (
@@ -81,7 +81,7 @@ export default function LoginPage() {
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-            className="w-full border px-4 py-2 rounded text-zinc-500"
+              className="w-full border px-4 py-2 rounded text-zinc-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Digite seu Password"
@@ -116,6 +116,18 @@ export default function LoginPage() {
           >
             Esqueceu a senha?
           </a>
+        </div>
+
+        <div className="mt-3 text-center">
+          <span className="text-sm text-gray-600">
+            Ainda não tem uma conta?{" "}
+            <a
+              href="/register"
+              className="text-cyan-600 hover:text-cyan-800 hover:underline transition-colors"
+            >
+              Crie uma aqui
+            </a>
+          </span>
         </div>
       </form>
     </div>
