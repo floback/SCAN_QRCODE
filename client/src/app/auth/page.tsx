@@ -122,7 +122,7 @@ export default function LoginPage() {
           <span className="text-sm text-gray-600">
             Ainda não tem uma conta?{" "}
             <a
-              href="/register"
+              href="/user/"
               className="text-cyan-600 hover:text-cyan-800 hover:underline transition-colors"
             >
               Crie uma aqui

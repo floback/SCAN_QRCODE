@@ -8,21 +8,22 @@ import { Email } from '../email/entities/email.entity';
 
 @Injectable()
 export class UserService {
-  
+
   constructor(
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
-  ) {}
-    
+  ) { }
+
   // CREATE USER
-    async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const userExisting = this.userRepository.findOne({
-      where: { email: createUserDto.email},
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const userExisting = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
     });
 
-    if (!userExisting) {
-      throw new ConflictException(`E-mail ${userExisting} already exists`);
+    if (userExisting) {
+      throw new ConflictException(`E-mail ${createUserDto.email} already exists`);
     }
-    
+
+
     const hashePassword = await bcrypt.hash(createUserDto.password, 10);
     const user = this.userRepository.create({
       ...createUserDto,
@@ -31,13 +32,43 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
+  // CREATE USER FROM PUBLIC FORM
+  async createUserUser(data: {
+    name: string;
+    email: string;
+    password: string;
+  }): Promise<UserEntity> {
+    const userExisting = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (userExisting) {
+      throw new ConflictException(`E-mail ${createUserDto.email} already exists`);
+    }
+
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const user = this.userRepository.create({
+      name: data.name,
+      email: data.email,
+      password: hashedPassword,
+      status: false, // desativado por padrão
+      type_user: UserType.user, // use o enum corretamente
+    });
+
+    return await this.userRepository.save(user);
+  }
+
+
+
   // FIND ALL
-  async findAll(): Promise<UserEntity[]>{
+  async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find();
   }
 
   // FIND BY ID
-  async findById( id:  string): Promise<UserEntity>{
+  async findById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException(`User id ${id} not found`);
@@ -46,34 +77,34 @@ export class UserService {
   }
 
   //UPDATE USER
-  async updateUser( 
-    id: string, 
+  async updateUser(
+    id: string,
     createUserDto: Partial<CreateUserDto>,
-   ): Promise<UserEntity> {
-      const user = await this.findById(id);
-      
-      if (createUserDto.password) {
-        createUserDto.password = await bcrypt.hash(createUserDto.password, 10)
-      }
+  ): Promise<UserEntity> {
+    const user = await this.findById(id);
 
-      if ( createUserDto.email && createUserDto.email !== user.email ) {
-        const existing = await this.userRepository.findOne({
-          where: { email: createUserDto.email },
-        });
-        if (existing) {
-            throw new ConflictException(`This is e-mail ${createUserDto.email} existing`);
-        }
-      }
-      const updated = Object.assign( user, createUserDto );
-      return await this.userRepository.save(updated);
-   }
+    if (createUserDto.password) {
+      createUserDto.password = await bcrypt.hash(createUserDto.password, 10)
+    }
 
-   //DELETE USER
-   async deleteUser(id: string): Promise<{ message: string }>{
+    if (createUserDto.email && createUserDto.email !== user.email) {
+      const existing = await this.userRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+      if (existing) {
+        throw new ConflictException(`This is e-mail ${createUserDto.email} existing`);
+      }
+    }
+    const updated = Object.assign(user, createUserDto);
+    return await this.userRepository.save(updated);
+  }
+
+  //DELETE USER
+  async deleteUser(id: string): Promise<{ message: string }> {
     const user = await this.findById(id);
     await this.userRepository.remove(user);
-    return { message: `User id ${user.id} removed!`};
-   }
+    return { message: `User id ${user.id} removed!` };
+  }
 }
 
 
