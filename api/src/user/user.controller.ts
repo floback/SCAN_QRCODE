@@ -29,9 +29,10 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Post('/register')
+  @Post('register')
   createUserUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
-  return this.userService.createUserUser(createUserDto);
+    console.log('Recebi a requisição:', createUserDto);
+    return this.userService.createUserUser(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

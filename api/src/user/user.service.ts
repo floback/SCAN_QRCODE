@@ -33,27 +33,21 @@ export class UserService {
   }
 
   // CREATE USER FROM PUBLIC FORM
-  async createUserUser(data: {
-    name: string;
-    email: string;
-    password: string;
-  }): Promise<UserEntity> {
+  async createUserUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const userExisting = await this.userRepository.findOne({
-      where: { email: createUserDto.email },
+      where: { email: createUserDto.email},
     });
 
     if (userExisting) {
       throw new ConflictException(`E-mail ${createUserDto.email} already exists`);
     }
 
-
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
+    console.log(createUserDto)
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const user = this.userRepository.create({
-      name: data.name,
-      email: data.email,
+      ...createUserDto,
       password: hashedPassword,
-      status: false, // desativado por padrão
+      status: true, // desativado por padrão
       type_user: UserType.user, // use o enum corretamente
     });
 

@@ -18,7 +18,7 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true); // <-- Mostra loader
-
+    
     try {
       const response = await axios.post("http://localhost:3001/auth/login", {
         email,
@@ -122,7 +122,7 @@ export default function LoginPage() {
           <span className="text-sm text-gray-600">
             Ainda não tem uma conta?{" "}
             <a
-              href="/user/"
+              href="/user/register"
               className="text-cyan-600 hover:text-cyan-800 hover:underline transition-colors"
             >
               Crie uma aqui
