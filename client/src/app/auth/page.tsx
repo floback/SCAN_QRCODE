@@ -17,8 +17,9 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true); // <-- Mostra loader
-    
+    setIsLoading(true);
+    setError("");
+
     try {
       const response = await axios.post("http://localhost:3001/auth/login", {
         email,
@@ -28,108 +29,122 @@ export default function LoginPage() {
       const { access_token } = response.data;
       localStorage.setItem("token", access_token);
 
-      // Simula tempo de carregamento antes de redirecionar
       setTimeout(() => {
-        router.push("//");
-      }, 2000);
+        router.push("/");
+      }, 1500);
     } catch (err) {
       setError("E-mail ou senha inválidos!");
-      setIsLoading(false); // <-- Oculta loader se falhar
+      setIsLoading(false);
     }
   };
-
-  if (isLoading) return <Loader />;
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  if (isLoading) return <Loader />;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br bg-cyan-50 from-cyan-100 to-cyan-200 via-cyan-300">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-10 w-130 rounded-3xl border shadow-lg"
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-300 px-4">
+      <section
+        className="bg-white p-8 sm:p-10 w-full max-w-md rounded-3xl shadow-xl border border-cyan-100 animate-fade-in"
+        aria-label="Formulário de login"
       >
         <div className="mb-8 text-center">
-          <h2 className="text-4xl font-bold text-zinc-700 font-sans">Login</h2>
+          <h1 className="text-4xl font-bold text-zinc-700 font-sans">Login</h1>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded">
+          <div
+            className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded"
+            role="alert"
+          >
             {error}
           </div>
         )}
 
-        <div className="mb-5">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Email
-          </label>
-          <input
-            type="email"
-            className="w-full border px-4 py-2 rounded text-zinc-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Digite seu E-mail"
-            required
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Senha
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              className="w-full border px-4 py-2 rounded text-zinc-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite seu Password"
-              required
-            />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-              aria-label={showPassword ? "Hide password" : "Show password"}
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1.5"
             >
-              {showPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
-            </button>
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="w-full border px-4 py-2 rounded-md text-zinc-600 shadow-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              placeholder="Digite seu e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              aria-invalid={!!error}
+            />
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className="w-full bg-cyan-500 text-white py-2.5 rounded-md hover:bg-cyan-600 transition-colors font-medium shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-        >
-          Entrar
-        </button>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1.5"
+            >
+              Senha
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                className="w-full border px-4 py-2 rounded-md text-zinc-600 shadow-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none pr-10"
+                placeholder="Digite sua senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-cyan-500 text-white py-2.5 rounded-md hover:bg-cyan-600 transition-colors font-medium shadow-soft hover:shadow animate-pulseSoft"
+          >
+            Entrar
+          </button>
+        </form>
 
         <div className="mt-5 text-center">
           <a
             href="/email/recovery"
-            className="text-sm text-cyan-600 hover:text-cyan-800 hover:underline transition-colors"
+            className="text-sm text-cyan-600 hover:text-cyan-800 hover:underline"
           >
             Esqueceu a senha?
           </a>
         </div>
 
-        <div className="mt-3 text-center">
-          <span className="text-sm text-gray-600">
-            Ainda não tem uma conta?{" "}
-            <a
-              href="/user/register"
-              className="text-cyan-600 hover:text-cyan-800 hover:underline transition-colors"
-            >
-              Crie uma aqui
-            </a>
-          </span>
+        <div className="mt-3 text-center text-sm text-gray-600">
+          Ainda não tem uma conta?{" "}
+          <a
+            href="/user/register"
+            className="text-cyan-600 hover:text-cyan-800 hover:underline"
+          >
+            Crie uma aqui
+          </a>
         </div>
-      </form>
-    </div>
+      </section>
+    </main>
   );
 }
