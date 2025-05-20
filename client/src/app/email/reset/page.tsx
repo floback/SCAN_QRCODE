@@ -1,27 +1,31 @@
-'use client';
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+"use client";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Button from "@/components/Button";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/email/reset-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, newPassword, confirmPassword }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/email/reset-password`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, newPassword, confirmPassword }),
+      }
+    );
 
     const data = await res.json();
     if (res.ok) {
-      setMessage('Senha alterada com sucesso!');
+      setMessage("Senha alterada com sucesso!");
     } else {
       setMessage(`Erro: ${data.message}`);
     }
@@ -50,11 +54,7 @@ export default function ResetPasswordPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button
-            className="w-full bg-cyan-500 text-white py-2.5 rounded-md hover:bg-cyan-600 transition-colors font-medium shadow-soft animate-pulseSoft"
-          >
-            Enviar
-          </button>
+         <Button typeStyle="primary">Enviar</Button>
         </form>
         {message && (
           <p className="mt-4 text-center text-sm text-zinc-600">{message}</p>

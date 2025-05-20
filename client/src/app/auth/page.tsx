@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Loader from "@/components/Loader";
 import { Eye, EyeOff } from "lucide-react";
+import Button from "@/components/Button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function LoginPage() {
       localStorage.setItem("token", access_token);
 
       setTimeout(() => {
-        router.push("/");
+        router.push("/qrcode");
       }, 1500);
     } catch (err) {
       setError("E-mail ou senha inválidos!");
@@ -117,13 +118,8 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
-
-          <button
-            type="submit"
-            className="w-full bg-cyan-500 text-white py-2.5 rounded-md hover:bg-cyan-600 transition-colors font-medium shadow-soft hover:shadow animate-pulseSoft"
-          >
-            Entrar
-          </button>
+          
+          <Button typeStyle="primary">Entrar</Button>
         </form>
 
         <div className="mt-5 text-center">

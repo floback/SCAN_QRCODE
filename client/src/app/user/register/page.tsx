@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Loader from "@/components/Loader";
 import { toast } from "react-toastify";
+import Button from "@/components/Button";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -137,12 +138,8 @@ export default function RegisterPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-cyan-500 text-white py-2.5 rounded-md hover:bg-cyan-600 transition-colors font-medium shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-        >
-          Criar conta
-        </button>
+      
+           <Button typeStyle="primary">Salvar</Button>
 
         <div className="mt-5 text-center">
           <a

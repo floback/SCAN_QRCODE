@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Button from "@/components/Button";
 
 export default function RecoveryPage() {
   const [email, setEmail] = useState("");
@@ -7,8 +8,9 @@ export default function RecoveryPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('API_URL:', process.env.NEXT_PUBLIC_API_URL);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/email/recovery-password`,
+    console.log("API_URL:", process.env.NEXT_PUBLIC_API_URL);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/email/recovery-password`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -39,12 +41,8 @@ export default function RecoveryPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button
-            type="submit"
-            className="w-full bg-cyan-500 text-white py-2.5 rounded-md hover:bg-cyan-600 transition-colors font-medium shadow-soft animate-pulseSoft"
-          >
-            Enviar
-          </button>
+          
+          <Button typeStyle="primary">Enviar</Button>
         </form>
         {message && (
           <p className="mt-4 text-center text-sm text-zinc-600">{message}</p>
