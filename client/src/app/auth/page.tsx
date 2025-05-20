@@ -6,6 +6,7 @@ import axios from "axios";
 import Loader from "@/components/Loader";
 import { Eye, EyeOff } from "lucide-react";
 import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -66,19 +67,14 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
-              Email
-            </label>
-            <input
+
+            <Input
+              label="Email"
               id="email"
               name="email"
               type="email"
               autoComplete="email"
               required
-              className="w-full border px-4 py-2 rounded-md text-zinc-600 shadow-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none"
               placeholder="Digite seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -87,23 +83,16 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
-              Senha
-            </label>
-            <div className="relative">
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                required
-                className="w-full border px-4 py-2 rounded-md text-zinc-600 shadow-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none pr-10"
-                placeholder="Digite sua senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <div>
+            <Input
+              label="Senha"
+              name="password"
+              placeholder="Digite sua senha"
+              showTogglePassword
+              size="md"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
@@ -118,7 +107,7 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
-          
+
           <Button typeStyle="primary">Entrar</Button>
         </form>
 

@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "Page Auth"
+        "Page Auth",
+        "New Inputs app"
     ]
 }
