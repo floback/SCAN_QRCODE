@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 export default function RecoveryPage() {
   const [email, setEmail] = useState("");
@@ -33,10 +34,13 @@ export default function RecoveryPage() {
           Recuperação de Senha
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
+          <Input
+            label="Email"
+            id="email"
+            name="email"
             type="email"
+            autoComplete="email"
             required
-            className="w-full border border-zinc-300 px-4 py-2 rounded-md text-zinc-700 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
             placeholder="Digite seu e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

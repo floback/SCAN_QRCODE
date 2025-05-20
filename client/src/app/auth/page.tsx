@@ -67,7 +67,6 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-
             <Input
               label="Email"
               id="email"
@@ -84,15 +83,15 @@ export default function LoginPage() {
 
           <div>
             <div>
-            <Input
-              label="Senha"
-              name="password"
-              placeholder="Digite sua senha"
-              showTogglePassword
-              size="md"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <Input
+                label="Senha"
+                name="password"
+                placeholder="Digite sua senha"
+                showTogglePassword
+                size="md"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
