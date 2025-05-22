@@ -101,6 +101,24 @@ export class ScanController {
     return await this.scanService.findAll();
   }
 
+  @Get('find/join')
+  async findAllJoin(): Promise<any[]> {
+    const scans = await this.scanService.findAllJoin();
+
+    return scans.map((scan) => ({
+      id: scan.id,
+      ip: scan.ip,
+      country: scan.country,
+      city: scan.city,
+      region: scan.region,
+      latitude: scan.latitude,
+      longitude: scan.longitude,
+      create_date: scan.create_date,
+      name: scan.qrcode?.name,
+      link_add: scan.qrcode?.link_add,
+    }));
+  }
+
   @UseGuards(JwtAuthGuard)
   @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
   @Get(':id')

@@ -10,6 +10,7 @@ export class ScanEntity {
   @JoinColumn({ name: 'id_qrcode' })
   qrcode: QrcodeEntity;
 
+  
   @Column()
   id_qrcode: string;
 

@@ -27,6 +27,14 @@ export class ScanService {
     return await this.scanRepository.find({ order: { create_date: 'DESC' } });
   }
 
+  // find All scan join qrcode
+  async findAllJoin(): Promise<any[]> {
+  return this.scanRepository.find({
+    relations: ["qrcode"],
+    order: { create_date: "DESC" },
+  });
+}
+
   async findById(id: string) {
     const scan = await this.scanRepository.findOne({ where: { id } });
     if (!scan) {
@@ -44,6 +52,5 @@ export class ScanService {
     return { message: `Registro de scan com ID ${id} deletado com sucesso.` };
   }
 
-  // FIND BY ID
   
 }

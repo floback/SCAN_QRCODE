@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cadastro de Usuário",
+  title: "Scan QR Code",
   description: "Formulário de criação de conta",
 };
 
