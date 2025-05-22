@@ -15,6 +15,7 @@ export default function QrcodePage() {
     totalScans,
     mostScannedCode,
     topRegion,
+    topCity,
   } = useQrcodeData();
 
   return (
@@ -46,22 +47,24 @@ export default function QrcodePage() {
     <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
     <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />
     <InfoCard title="CODE PLUS SCANNING" value={mostScannedCode || "-"} icon={Trophy} />
-    <InfoCard title="SCANNING REGION" value={topRegion || "-"} icon={MapPin} />
+    {/* <InfoCard title="SCANNING REGION" value={topRegion || "-"} icon={MapPin} /> */}
+    <InfoCard title="SCANNING CITY" value={topCity || "-"} icon={MapPin} />
   </div>
 
   {/* Campo de busca abaixo dos cards */}
-  <div className="bg-white rounded-xl shadow p-4 w-full mb-6">
-    <div className="flex items-center gap-2">
-      <Search className="text-gray-400" />
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full border-none outline-none bg-transparent text-gray-700"
-      />
-    </div>
+<div className="bg-white rounded-xl shadow p-4 w-full max-w-lg sm:max-w-md mb-6 mx-auto">
+  <div className="flex items-center gap-2">
+    <Search className="text-gray-400" />
+    <input
+      type="text"
+      placeholder="Search"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full border-none outline-none bg-transparent text-gray-700"
+    />
   </div>
+</div>
+
 
   <h2 className="text-lg font-bold mb-2 text-gray-800">QR CODE SCANNED</h2>
   <div className="overflow-auto bg-white rounded-xl shadow p-4">

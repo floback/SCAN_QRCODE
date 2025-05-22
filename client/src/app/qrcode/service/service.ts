@@ -10,6 +10,7 @@ export function useQrcodeData() {
   const [totalScans, setTotalScans] = useState(0);
   const [mostScannedCode, setMostScannedCode] = useState("");
   const [topRegion, setTopRegion] = useState("");
+  const [topCity, setTopCity] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,8 +57,19 @@ export function useQrcodeData() {
           return acc;
         }, {} as Record<string, number>);
 
+        
         const topRegionName = Object.entries(regionCount).sort((a, b) => b[1] - a[1])[0]?.[0];
         setTopRegion(topRegionName || "Desconhecida");
+        
+        // Contagem de cidade
+        const cityCount = rawData.reduce((acc, item) => {
+            acc[item.city] = (acc[item.city] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>);
+        
+        const topCityName = Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0]; 
+        setTopCity(topCityName || "Descinhecida");
+
 
         setData(rawData);
       } catch (error) {
@@ -84,5 +96,6 @@ export function useQrcodeData() {
     totalScans,
     mostScannedCode,
     topRegion,
+    topCity,
   };
 }
