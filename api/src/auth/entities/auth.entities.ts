@@ -1,5 +1,5 @@
 import { join } from "path";
-import { UserEntity } from "src/user/entities/user.entity";
+import { UserEntity } from "../../user/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('auth')

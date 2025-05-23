@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { UserType } from '../dto/create-user.dto';
-import { QrcodeEntity } from 'src/qrcode/entities/qrcode.entity';
-import { AuthEntity } from 'src/auth/entities/auth.entities';
+import { QrcodeEntity } from '../../qrcode/entities/qrcode.entity';
+import { AuthEntity } from '../../auth/entities/auth.entities';
 
 @Entity('users')
 export class UserEntity {

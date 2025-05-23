@@ -28,8 +28,7 @@ export class CreateAuthTable1713300000001 implements MigrationInterface {
           },
           {
           name: 'token',
-          type: 'char',
-          length: '255'
+          type: 'text',
           }
         ],
       })
