@@ -4,7 +4,7 @@ import { QrCode as QrCodeIcon, ScanLine, Trophy, MapPin, Search } from "lucide-r
 import InfoCard from "@/components/Card";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { useQrcodeData } from "./service/service";
+import { useScanData } from "./service/serviceScan";
 
 export default function QrcodePage() {
   const {
@@ -14,10 +14,9 @@ export default function QrcodePage() {
     totalCodes,
     totalScans,
     mostScannedCode,
-    topRegion,
     topCity,
-  } = useQrcodeData();
-
+  } = useScanData();
+  console.log(data);
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-6 text-sm font-sans">
   <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -72,22 +71,22 @@ export default function QrcodePage() {
       <tbody>
         {data.map((entry) => (
           <tr key={entry.id} className="border-b border-gray-200">
-            <td className="px-2 py-1">{entry.ip}</td>
-            <td className="px-2 py-1">{entry.country}</td>
-            <td className="px-2 py-1">{entry.city}</td>
-            <td className="px-2 py-1">{entry.region}</td>
-            <td className="px-2 py-1">{entry.name || '-'}</td>
+            <td className="px-2 py-1">{}</td>
+            <td className="px-2 py-1">{}</td>
+            <td className="px-2 py-1">{}</td>
+            <td className="px-2 py-1">{}</td>
+            <td className="px-2 py-1">{}</td>
             <td className="px-2 py-1 text-blue-600 underline">
               <a
                 href={entry.link_add}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {entry.link_add}
+                {}
               </a>
             </td>
             <td className="px-2 py-1">
-              {new Date(entry.create_date).toLocaleString()}
+              {/* {new Date(entry.create_date).toLocaleString()} */}
             </td>
           </tr>
         ))}

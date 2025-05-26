@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { QrCode } from "../types/types";
 
-export function useQrcodeData() {
+export function useScanData() {
   const [data, setData] = useState<QrCode[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [totalCodes, setTotalCodes] = useState(0);
