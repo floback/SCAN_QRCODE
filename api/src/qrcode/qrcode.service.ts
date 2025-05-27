@@ -50,8 +50,6 @@ export class QrcodeService {
   }
   
   
-  
-
   // Método para encontrar um QRCode por ID
   async findById(id: string): Promise<QrcodeEntity | null> {
     return await this.qrcodeRepository.findOne({ where: { id } });

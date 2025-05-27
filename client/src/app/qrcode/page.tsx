@@ -1,12 +1,22 @@
 "use client";
 
-import { QrCode as QrCodeIcon, ScanLine, Trophy, MapPin, Search } from "lucide-react";
+import {
+  QrCode as QrCodeIcon,
+  ScanLine,
+  Trophy,
+  MapPin,
+  Search,
+} from "lucide-react";
 import InfoCard from "@/components/Card";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { useScanData } from "./service/serviceScan";
+import { useScanData } from "./hook/useScan";
+import { useQrcodeData } from "./hook/useQrcode";
 
 export default function QrcodePage() {
+  const { dataQrcode, createQrcode, deleteQrcode, loading, error } =
+    useQrcodeData();
+
   const {
     data,
     searchTerm,
@@ -16,150 +26,162 @@ export default function QrcodePage() {
     mostScannedCode,
     topCity,
   } = useScanData();
-  console.log(data);
+
+  console.log(useQrcodeData);
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-6 text-sm font-sans">
-  <div className="flex flex-col md:flex-row gap-4 mb-6">
-    <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-3 w-full md:w-1/2">
-  <h1 className="text-xl font-bold mb-4 text-gray-700">GENERATE QR CODE</h1>
-      <Input
-        label="Enter a number or a link"
-        placeholder="Ex: 5521... https://wa.me/..."
-        size="sm"
-        className="w-full"
-      />
-      <Input
-        label="Enter code name"
-        placeholder="Ex: Comercial Lote XV,Campanha Nova ISP"
-        size="sm"
-        className="w-full"
-      />
-      <Button typeStyle="secondary" size="small">
-        Generate
-      </Button>
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        {/* Formulário de geração */}
+        <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-3 w-full md:w-1/2">
+          <h1 className="text-xl font-bold mb-4 text-gray-700">
+            GENERATE QR CODE
+          </h1>
+          <Input
+            label="Enter a number or a link"
+            placeholder="Ex: 5521... https://wa.me/..."
+            size="sm"
+            className="w-full"
+          />
+          <Input
+            label="Enter code name"
+            placeholder="Ex: Comercial Lote XV, Campanha Nova ISP"
+            size="sm"
+            className="w-full"
+          />
+          <Button typeStyle="secondary" size="small">
+            Generate
+          </Button>
+        </div>
+
+        {/* Tabela de QRCodes */}
+        <div className="overflow-auto bg-white rounded-xl shadow p-4">
+          <h1 className="text-lg font-bold mb-2 text-gray-800">
+            QR CODE GENERATED
+          </h1>
+          <div className="bg-white rounded-md shadow p-2 w-full max-w-sm mb-2 mr-auto">
+            <div className="flex items-center gap-2">
+              <Search className="text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm py-1"
+              />
+            </div>
+          </div>
+          <table className="min-w-full text-left text-gray-700 text-sm">
+            <thead className="border-b border-gray-300">
+              <tr>
+                <th className="px-2 py-2">NAME</th>
+                <th className="px-2 py-2">LINK</th>
+                <th className="px-2 py-2">NUMBER FONE</th>
+                <th className="px-2 py-2">STATUS</th>
+                <th className="px-2 py-2">CREATE DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataQrcode.map((qrcode) => {
+                console.log(`Data de criação: ${qrcode.create_date}`);
+                return (
+                  <tr key={qrcode.id} className="border-b border-gray-200">
+                    <td className="px-2 py-1">{qrcode.name || "-"}</td>
+                    <td className="px-2 py-1 text-blue-600 underline">
+                      <a
+                        href={qrcode.link_add}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {qrcode.link_add}
+                      </a>
+                    </td>
+                    <td className="px-2 py-1">{qrcode.number_fone || "-"}</td>
+                    <td className="px-2 py-1 text-center">
+                      <span
+                        className={`inline-block w-3 h-3 rounded-full mx-auto ${
+                          qrcode.status ? "bg-green-500" : "bg-gray-400"
+                        }`}
+                        title={qrcode.status ? "Ativo" : "Inativo"}
+                      ></span>
+                    </td>
+
+                    <td className="px-2 py-1">
+                      {qrcode.create_date
+                        ? new Date(qrcode.create_date).toLocaleString()
+                        : "-"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Cards de estatísticas */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
+        <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />
+        <InfoCard
+          title="CODE PLUS SCANNING"
+          value={mostScannedCode || "-"}
+          icon={Trophy}
+        />
+        <InfoCard title="SCANNING CITY" value={topCity || "-"} icon={MapPin} />
+      </div>
+
+      {/* Tabela de escaneamentos */}
+      <div className="overflow-auto bg-white rounded-xl shadow p-4">
+        <h2 className="text-lg font-bold mb-2 text-gray-800">
+          QR CODE SCANNED
+        </h2>
+        <div className="flex items-center gap-2">
+          <Search className="text-gray-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm py-1"
+          />
+        </div>
+        <table className="min-w-full text-left text-gray-700 text-sm">
+          <thead className="border-b border-gray-300">
+            <tr>
+              <th className="px-2 py-2">IP</th>
+              <th className="px-2 py-2">COUNTRY</th>
+              <th className="px-2 py-2">CITY</th>
+              <th className="px-2 py-2">REGION</th>
+              <th className="px-2 py-2">CODE NAME</th>
+              <th className="px-2 py-2">LINK ADD</th>
+              <th className="px-2 py-2">DATE AND TIME</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((entry) => (
+              <tr key={entry.id} className="border-b border-gray-200">
+                <td className="px-2 py-1">{entry.ip}</td>
+                <td className="px-2 py-1">{entry.country}</td>
+                <td className="px-2 py-1">{entry.city}</td>
+                <td className="px-2 py-1">{entry.region}</td>
+                <td className="px-2 py-1">{entry.name || "-"}</td>
+                <td className="px-2 py-1 text-blue-600 underline">
+                  <a
+                    href={entry.link_add}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {entry.link_add}
+                  </a>
+                </td>
+                <td className="px-2 py-1">
+                  {new Date(entry.create_date).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  <div className="overflow-auto bg-white rounded-xl shadow p-4">
-    
-  <h1 className="text-lg font-bold mb-2 text-gray-800">QR CODE GENERATE</h1>
-
-{/* Campo de busca qrcodes reduzido */}
-<div className="bg-white rounded-md shadow p-2 w-full max-w-sm mb-2 mr-auto">
-  <div className="flex items-center gap-2">
-    <Search className="text-gray-400 w-4 h-4" />
-    <input
-      type="text"
-      placeholder="Search"
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm py-1"
-    />
-  </div>
-</div>
-
-    <table className="min-w-full text-left text-gray-700 text-sm">
-      <thead className="border-b border-gray-300">
-        <tr>
-          <th className="px-2 py-2">NAME</th>
-          <th className="px-2 py-2">CODE</th>
-          <th className="px-2 py-2">IMG</th>
-          <th className="px-2 py-2">LINK</th>
-          <th className="px-2 py-2">NUMBER FONE</th>
-          <th className="px-2 py-2">STATUS</th>
-          <th className="px-2 py-2">CREATE DATE</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((entry) => (
-          <tr key={entry.id} className="border-b border-gray-200">
-            <td className="px-2 py-1">{}</td>
-            <td className="px-2 py-1">{}</td>
-            <td className="px-2 py-1">{}</td>
-            <td className="px-2 py-1">{}</td>
-            <td className="px-2 py-1">{}</td>
-            <td className="px-2 py-1 text-blue-600 underline">
-              <a
-                href={entry.link_add}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {}
-              </a>
-            </td>
-            <td className="px-2 py-1">
-              {/* {new Date(entry.create_date).toLocaleString()} */}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-  </div>
-
-  {/* Cards de estatísticas */}
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-    <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
-    <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />
-    <InfoCard title="CODE PLUS SCANNING" value={mostScannedCode || "-"} icon={Trophy} />
-    {/* <InfoCard title="SCANNING REGION" value={topRegion || "-"} icon={MapPin} /> */}
-    <InfoCard title="SCANNING CITY" value={topCity || "-"} icon={MapPin} />
-  </div>
-
-  {/* Campo de busca abaixo dos cards */}
-  <div className="bg-white rounded-xl shadow p-4 w-full max-w-md mb-6 mr-auto">
-    <div className="flex items-center gap-2">
-      <Search className="text-gray-400" />
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full border-none outline-none bg-transparent text-gray-700"
-      />
-    </div>
-  </div>
-
-
-
-
-  <h2 className="text-lg font-bold mb-2 text-gray-800">QR CODE SCANNED</h2>
-  <div className="overflow-auto bg-white rounded-xl shadow p-4">
-    <table className="min-w-full text-left text-gray-700 text-sm">
-      <thead className="border-b border-gray-300">
-        <tr>
-          <th className="px-2 py-2">IP</th>
-          <th className="px-2 py-2">COUNTRY</th>
-          <th className="px-2 py-2">CITY</th>
-          <th className="px-2 py-2">REGION</th>
-          <th className="px-2 py-2">CODE NAME</th>
-          <th className="px-2 py-2">LINK ADD</th>
-          <th className="px-2 py-2">DATE AND TIME</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((entry) => (
-          <tr key={entry.id} className="border-b border-gray-200">
-            <td className="px-2 py-1">{entry.ip}</td>
-            <td className="px-2 py-1">{entry.country}</td>
-            <td className="px-2 py-1">{entry.city}</td>
-            <td className="px-2 py-1">{entry.region}</td>
-            <td className="px-2 py-1">{entry.name || '-'}</td>
-            <td className="px-2 py-1 text-blue-600 underline">
-              <a
-                href={entry.link_add}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {entry.link_add}
-              </a>
-            </td>
-            <td className="px-2 py-1">
-              {new Date(entry.create_date).toLocaleString()}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
   );
 }
