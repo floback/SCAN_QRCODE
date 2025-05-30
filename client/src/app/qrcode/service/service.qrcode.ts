@@ -4,6 +4,20 @@
 import { QrCode } from "../types/types";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
+// Criar novo QR Code
+export const createQrcode = async (
+  newQrcode: Partial<QrCode>
+): Promise<QrCode | null> => {
+  return await fetchWithAuth<QrCode>(
+    `${process.env.NEXT_PUBLIC_API_URL}/qrcode`,
+    {
+      method: "POST",
+      body: JSON.stringify(newQrcode),
+    }
+  );
+};
+
+
 // Buscar todos os QR Codes
 export const getAllQrcodes = async (): Promise<QrCode[] | null> => {
   return await fetchWithAuth<QrCode[]>(
@@ -25,24 +39,17 @@ export const updateQrcode = async (
   );
 };
 
-// Criar novo QR Code
-export const createQrcode = async (
-  newQrcode: Partial<QrCode>
-): Promise<QrCode | null> => {
-  return await fetchWithAuth<QrCode>(
-    `${process.env.NEXT_PUBLIC_API_URL}/qrcode`,
-    {
-      method: "POST",
-      body: JSON.stringify(newQrcode),
-    }
-  );
-};
 
 // Deletar QR Code
-export const deleteQrcode = async (id: number): Promise<boolean> => {
+export const deleteQrcode = async (
+  id: string
+): Promise<boolean> => {
   const result = await fetchWithAuth(
     `${process.env.NEXT_PUBLIC_API_URL}/qrcode/${id}`,
-    { method: "DELETE" }
+    { 
+      method: "DELETE",
+      body: JSON.stringify(deleteQrcode),
+     }
   );
   return result !== null;
 };

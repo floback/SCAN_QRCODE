@@ -1,4 +1,3 @@
-// src/lib/fetchWithAuth.ts
 export async function fetchWithAuth<T = any>(
   url: string,
   options: RequestInit = {}
@@ -29,14 +28,20 @@ export async function fetchWithAuth<T = any>(
     }
 
     if (!response.ok) {
-      console.error("Erro na requisição:", response.status, await response.text());
+      const errorText = await response.text();
+      console.error("Erro na requisição:", response.status, errorText);
       return null;
+    }
+
+    if (response.status === 204) {
+      // DELETE geralmente retorna 204 No Content
+      return true as T;
     }
 
     return await response.json();
   } catch (error) {
     console.error("Erro inesperado:", error);
-    window.location.href = "/auth";
+    // Só redireciona se for um erro de autenticação — NÃO aqui!
     return null;
   }
 }

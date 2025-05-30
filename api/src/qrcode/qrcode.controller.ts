@@ -12,7 +12,7 @@ import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('qrcode')
 export class QrcodeController {
-  constructor(private readonly qrcodeService: QrcodeService) {}
+  constructor(private readonly qrcodeService: QrcodeService) { }
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.OWNER, Role.ADMIN, Role.USER)
@@ -27,29 +27,31 @@ export class QrcodeController {
   }
 
 
-    @UseGuards(JwtAuthGuard)
-    @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
-    @Get()
-    async findAll(): Promise<QrcodeEntity[]> {
-      return this.qrcodeService.findAll();
-    }
+  @UseGuards(JwtAuthGuard)
+  @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
+  @Get()
+  async findAll(): Promise<QrcodeEntity[]> {
+    return this.qrcodeService.findAll();
+  }
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
-   @Get(':id')
-   async findById(@Param('id') id: string): Promise<QrcodeEntity> {
-     const qrcode = await this.qrcodeService.findById(id);
-     if (!qrcode) {
-       throw new NotFoundException(`QRCode com ID ${id} não encontrado.`);
-     }
-     return qrcode;
-   }
-  
+  @Get(':id')
+  async findById(@Param('id') id: string): Promise<QrcodeEntity> {
+    const qrcode = await this.qrcodeService.findById(id);
+    if (!qrcode) {
+      throw new NotFoundException(`QRCode com ID ${id} não encontrado.`);
+    }
+    return qrcode;
+  }
+
   @UseGuards(JwtAuthGuard)
-  @Roles(Role.OWNER, Role.ADMIN, Role.USER) 
+  @Roles(Role.OWNER, Role.ADMIN, Role.USER)
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<string> {
-    return this.qrcodeService.delete(id);
+  @Delete(':id')
+  async deleteQrcode(@Param('id') id: string) {
+    await this.qrcodeService.delete(id);
+    return { message: 'QR Code deletado com sucesso', id }; // Ou apenas `res.status(204).send();`
   }
 
 
@@ -62,16 +64,16 @@ export class QrcodeController {
     return this.qrcodeService.openWhatsapp(qrcode.number_fone);
   }
 
-    @UseGuards(JwtAuthGuard)
-    @Roles(Role.OWNER, Role.ADMIN, Role.USER)
-    @Patch(':id')
-    async update(
-      @Param('id') id: string,
-      @Body() createQrcodeDto: CreateQrcodeDto,
-    ): Promise<QrcodeEntity> {
-      console.log('ID recebido para update:', id);
-      console.log('Body recebido:', createQrcodeDto);
-      return this.qrcodeService.update(id, createQrcodeDto);
-    }
+  @UseGuards(JwtAuthGuard)
+  @Roles(Role.OWNER, Role.ADMIN, Role.USER)
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() createQrcodeDto: CreateQrcodeDto,
+  ): Promise<QrcodeEntity> {
+    console.log('ID recebido para update:', id);
+    console.log('Body recebido:', createQrcodeDto);
+    return this.qrcodeService.update(id, createQrcodeDto);
+  }
 
 }

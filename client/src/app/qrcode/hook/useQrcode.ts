@@ -6,7 +6,7 @@ import {
   getAllQrcodes,
   createQrcode as createQrcodeApi,
   deleteQrcode as deleteQrcodeApi,
-  updateQrcode as updateQrcodeApi, // 👈 IMPORTAR AQUI
+  updateQrcode as updateQrcodeApi,
 } from "../service/service.qrcode";
 
 export function useQrcodeData() {
@@ -35,24 +35,23 @@ export function useQrcodeData() {
     }
   };
 
-  const deleteQrcode = async (id: number) => {
-    try {
-      const success = await deleteQrcodeApi(id);
-      if (success) setData((prev) => prev.filter((qrcode) => qrcode.id !== id));
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  // ✅ NOVO MÉTODO DE UPDATE
   const updateQrcode = async (id: string, updatedData: Partial<QrCode>) => {
     try {
       const updated = await updateQrcodeApi(id, updatedData);
       if (updated) {
         setData((prev) =>
-          prev.map((qrcode) => (qrcode.id === Number(id) ? updated : qrcode))
+          prev.map((qrcode) => (qrcode.id === String(id) ? updated : qrcode))
         );
       }
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const deleteQrcode = async (id: string) => {
+    try {
+      const successDelete = await deleteQrcodeApi(id);
+      if (successDelete) setData((prev) => prev.filter((qrcode) => qrcode.id !== id));
     } catch (err: any) {
       setError(err.message);
     }
@@ -69,6 +68,6 @@ export function useQrcodeData() {
     fetchData,
     createQrcode,
     deleteQrcode,
-    updateQrcode, // 👈 Retornar aqui também
+    updateQrcode,
   };
 }
