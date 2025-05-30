@@ -12,10 +12,23 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useScanData } from "./hook/useScan";
 import { useQrcodeData } from "./hook/useQrcode";
+import ModalQrcode from "@/components/ModalQrcode";
+import { useState } from "react";
+import { QrCode } from "@/app/qrcode/types/types";
 
 export default function QrcodePage() {
-  const { dataQrcode, createQrcode, deleteQrcode, loading, error } =
-    useQrcodeData();
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState<QrCode | null>(null);
+  const [loadingModal, setLoadingModal] = useState(false);
+
+  const {
+    dataQrcode,
+    createQrcode,
+    deleteQrcode,
+    loading,
+    error,
+    fetchData, // pegamos o fetchData aqui!
+  } = useQrcodeData();
 
   const {
     data,
@@ -27,7 +40,6 @@ export default function QrcodePage() {
     topCity,
   } = useScanData();
 
-  console.log(useQrcodeData);
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-6 text-sm font-sans">
       <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -78,45 +90,83 @@ export default function QrcodePage() {
                 <th className="px-2 py-2">NUMBER FONE</th>
                 <th className="px-2 py-2">STATUS</th>
                 <th className="px-2 py-2">CREATE DATE</th>
+                <th className="px-2 py-2"></th>
+                <th className="px-2 py-2"></th>
               </tr>
             </thead>
             <tbody>
-              {dataQrcode.map((qrcode) => {
-                console.log(`Data de criação: ${qrcode.create_date}`);
-                return (
-                  <tr key={qrcode.id} className="border-b border-gray-200">
-                    <td className="px-2 py-1">{qrcode.name || "-"}</td>
-                    <td className="px-2 py-1 text-blue-600 underline">
-                      <a
-                        href={qrcode.link_add}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {qrcode.link_add}
-                      </a>
-                    </td>
-                    <td className="px-2 py-1">{qrcode.number_fone || "-"}</td>
-                    <td className="px-2 py-1 text-center">
-                      <span
-                        className={`inline-block w-3 h-3 rounded-full mx-auto ${
-                          qrcode.status ? "bg-green-500" : "bg-gray-400"
-                        }`}
-                        title={qrcode.status ? "Ativo" : "Inativo"}
-                      ></span>
-                    </td>
-
-                    <td className="px-2 py-1">
-                      {qrcode.create_date
-                        ? new Date(qrcode.create_date).toLocaleString()
-                        : "-"}
-                    </td>
-                  </tr>
-                );
-              })}
+              {dataQrcode.map((qrcode) => (
+                <tr key={qrcode.id} className="border-b border-gray-200">
+                  <td className="px-2 py-1">{qrcode.name || "-"}</td>
+                  <td className="px-2 py-1 text-blue-600 underline">
+                    <a
+                      href={qrcode.link_add}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {qrcode.link_add}
+                    </a>
+                  </td>
+                  <td className="px-2 py-1">{qrcode.number_fone || "-"}</td>
+                  <td className="px-2 py-1 text-center">
+                    <span
+                      className={`inline-block w-3 h-3 rounded-full mx-auto ${
+                        qrcode.status ? "bg-green-500" : "bg-gray-400"
+                      }`}
+                      title={qrcode.status ? "Ativo" : "Inativo"}
+                    ></span>
+                  </td>
+                  <td className="px-2 py-1">
+                    {qrcode.create_date
+                      ? new Date(qrcode.create_date).toLocaleString()
+                      : "-"}
+                  </td>
+                  <td className="px-2 py-1 flex gap-2">
+                    <button
+                      className="text-xs bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLoadingModal(true);
+                        setShowEditModal(true);
+                        setTimeout(() => {
+                          setEditData(qrcode);
+                          setLoadingModal(false);
+                        }, 500);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const confirmed = confirm(
+                          `Tem certeza que deseja deletar o QR Code "${qrcode.name}"?`
+                        );
+                        if (confirmed) {
+                          deleteQrcode(qrcode.id);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Modal de edição */}
+      <ModalQrcode
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        loading={loadingModal}
+        data={editData}
+        setLoadingModal={setLoadingModal}
+        fetchData={fetchData}
+      />
 
       {/* Cards de estatísticas */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">

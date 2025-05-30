@@ -62,13 +62,16 @@ export class QrcodeController {
     return this.qrcodeService.openWhatsapp(qrcode.number_fone);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.OWNER, Role.ADMIN, Role.USER)
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() createQrcodeDto: CreateQrcodeDto,
-  ): Promise<QrcodeEntity> {
-    return this.qrcodeService.update(id, createQrcodeDto);
-  }
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.OWNER, Role.ADMIN, Role.USER)
+    @Patch(':id')
+    async update(
+      @Param('id') id: string,
+      @Body() createQrcodeDto: CreateQrcodeDto,
+    ): Promise<QrcodeEntity> {
+      console.log('ID recebido para update:', id);
+      console.log('Body recebido:', createQrcodeDto);
+      return this.qrcodeService.update(id, createQrcodeDto);
+    }
+
 }

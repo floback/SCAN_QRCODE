@@ -20,8 +20,8 @@ export class QrcodeService {
  
   async createQRCode(
     id_user: string,
-    number_fone: string,
-    link_add: string,
+    number_fone?: string,
+    link_add?: string,
     name?: string,
   ): Promise<QrcodeEntity> {
     const uniqueCode = uuidv4();
@@ -99,7 +99,8 @@ export class QrcodeService {
     }
 
     const updatedQrcode = Object.assign(qrcode, createQrcodeDto);
-
-    return await this.qrcodeRepository.save(updatedQrcode);
+    console.log('ID recebido para update:', id);
+    console.log('Body recebido:', createQrcodeDto);
+    return  this.qrcodeRepository.save(qrcode);
   }
 }

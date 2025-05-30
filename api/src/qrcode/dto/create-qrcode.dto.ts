@@ -1,4 +1,6 @@
 import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer'; // Separado para clareza
+
 
 export class CreateQrcodeDto {
 
@@ -6,11 +8,14 @@ export class CreateQrcodeDto {
   @IsString()
   name?: string;
   
+  @IsOptional()
   @IsString()
-  link_add: string;
+  link_add?: string;
 
-  @IsNumber()
-  number_fone: string;
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => value.toString())
+  number_fone?: string;
 
   @IsOptional()
   status?: boolean;
@@ -19,3 +24,5 @@ export class CreateQrcodeDto {
   @IsString()
   code?: string;
 }
+
+

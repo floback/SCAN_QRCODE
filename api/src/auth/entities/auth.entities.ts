@@ -12,8 +12,8 @@ export class AuthEntity {
     user: UserEntity;
    
 
-@Column({ type: 'text' })
-token: string;
+    @Column({ type: 'text' })
+    token: string;
 
 
 }
