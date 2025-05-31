@@ -89,12 +89,11 @@ export default function ModalQrcode({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" />
         <Dialog.Content className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-xl focus:outline-none">
-          <Dialog.Title className="text-xl font-bold mb-4">
+          <Dialog.Title className="text-xl text-cyan-800 font-bold mb-4">
             Editar QR Code
           </Dialog.Title>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="name">Nome</Label>
               <Input
                 label="Nome"
                 value={formData.name}
@@ -104,7 +103,6 @@ export default function ModalQrcode({
               />
             </div>
             <div>
-              <Label htmlFor="link">Link</Label>
               <Input
                 label="Link"
                 value={formData.link}
@@ -114,7 +112,6 @@ export default function ModalQrcode({
               />
             </div>
             <div>
-              <Label htmlFor="whatsapp">WhatsApp Number</Label>
               <Input
                 label="WhatsApp"
                 value={formData.whatsapp}

@@ -114,10 +114,11 @@ export default function QrcodePage() {
           </div>
           {/* Adicionada a classe overflow-auto para a tabela ter rolagem */}
           <div className="h-[10] overflow-auto flex-grow"> 
-            <table className="min-w-full text-sm text-left text-gray-600">
+            <table className="min-w-full text-sm text-center text-gray-600">
               <thead className="bg-gray-100 text-xs uppercase text-gray-500 sticky top-0">
                 <tr>
                   <th className="px-2 py-2">NAME</th>
+                  <th className="px-2 py-2">IMG</th>
                   <th className="px-2 py-2">LINK</th>
                   <th className="px-2 py-2">NUMBER FONE</th>
                   <th className="px-2 py-2">STATUS</th>
@@ -129,17 +130,11 @@ export default function QrcodePage() {
               <tbody>
                 {dataQrcode.map((qrcode) => (
                   <tr key={qrcode.id} className="border-b border-gray-200">
-                    <td className="px-2 py-1">{qrcode.name || "-"}</td>
+                    <td className="px-2 py-1 text-xs">{qrcode.name || "-"}</td>
+                   <td className="px-2 py-1"><img src={qrcode.img} alt="QR Code" className="h-12 w-12 object-contain" /></td>
                     {/* Diminuída a fonte para `text-xs` na coluna LINK */}
                     <td className="px-2 py-1 text-blue-600 underline text-xs max-w-xs truncate">
-                      <a
-                        href={qrcode.link_add}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {qrcode.link_add}
-                      </a>
-                    </td>
+                      <a href={qrcode.link_add} target="_blank" rel="noopener noreferrer">{qrcode.link_add}</a></td>
                     <td className="px-2 py-1">{qrcode.number_fone || "-"}</td>
                     <td className="px-2 py-1 text-center">
                       <span
@@ -229,8 +224,8 @@ export default function QrcodePage() {
             className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm py-1"
           />
         </div>
-        <table className="min-w-full text-left text-gray-700 text-sm">
-          <thead className="bg-gray-100 text-xs uppercase text-gray-500 sticky top-0">
+        <table className=" min-w-full text-center text-gray-700 text-sm">
+           <thead className="bg-gray-100 text-xs uppercase text-gray-500 sticky top-0">
             <tr>
               <th className="px-2 py-2">IP</th>
               <th className="px-2 py-2">COUNTRY</th>
