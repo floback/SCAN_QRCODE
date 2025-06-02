@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { QrCode } from "../types/types";
 import {
   getAllQrcodes,
@@ -8,11 +8,13 @@ import {
   deleteQrcode as deleteQrcodeApi,
   updateQrcode as updateQrcodeApi,
 } from "../service/service.qrcode";
+import { data } from "framer-motion/client";
 
 export function useQrcodeData() {
   const [dataQrcode, setData] = useState<QrCode[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchQrcode, setSearchQrcode] = useState("");
 
   const fetchData = async () => {
     setLoading(true);
@@ -57,17 +59,29 @@ export function useQrcodeData() {
     }
   };
 
+
+  const filterData = useMemo(() => {
+    return dataQrcode.filter((entry) => 
+      Object.values(entry).some((value) =>
+       String(value).toLowerCase().includes(searchQrcode.toLowerCase())
+      )
+    );
+  }, [dataQrcode, searchQrcode]);
+  
+  
   useEffect(() => {
     fetchData();
   }, []);
 
   return {
-    dataQrcode,
+    dataQrcode: filterData,
     loading,
     error,
     fetchData,
     createQrcode,
     deleteQrcode,
     updateQrcode,
+    searchQrcode,
+    setSearchQrcode,
   };
 }

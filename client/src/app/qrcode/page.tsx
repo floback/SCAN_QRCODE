@@ -24,8 +24,16 @@ export default function QrcodePage() {
   const [name, setName] = useState("");
   const [numberFone, setNumberFone, ] = useState("");
 
-  const { dataQrcode, createQrcode, deleteQrcode, loading, error, fetchData } =
-    useQrcodeData();
+  const { 
+    dataQrcode,
+    searchQrcode,
+    setSearchQrcode, 
+    createQrcode,
+    deleteQrcode,
+    loading,
+    error,
+    fetchData,
+  } = useQrcodeData();
 
   const {
     data,
@@ -53,7 +61,6 @@ export default function QrcodePage() {
             value={linkAdd}
             onChange={(e) => setLinkAdd(e.target.value)}
           />
-
           <Input
             label="Enter Name"
             placeholder="Ex: Comercial Lote XV, Campanha Nova ISP"
@@ -101,19 +108,19 @@ export default function QrcodePage() {
             QR CODE GENERATED
           </h1>
           <div className="bg-white rounded-md shadow p-2 w-full max-w-sm mb-2 mr-auto">
-            <div className="flex items-center gap-2">
-              <Search className="text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm py-1"
-              />
-            </div>
+           <div className="flex items-center gap-2">
+            <Search className="text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQrcode}
+              onChange={(e) => setSearchQrcode(e.target.value)}
+              className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm py-1"
+            />
+          </div>
           </div>
           {/* Adicionada a classe overflow-auto para a tabela ter rolagem */}
-          <div className="h-[10] overflow-auto flex-grow"> 
+          <div className="h-[96] overflow-auto flex-grow"> 
             <table className="min-w-full text-sm text-center text-gray-600">
               <thead className="bg-gray-100 text-xs uppercase text-gray-500 sticky top-0">
                 <tr>
