@@ -49,7 +49,7 @@ export default function QrcodePage() {
     <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-6 text-sm font-sans">
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         {/* Formulário de geração */}
-        <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-3 w-full md:w-1/2">
+        <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-3 w-full md:w-1/3">
           <h1 className="text-xl font-bold mb-4 text-gray-700">
             GENERATE QR CODE
           </h1>
@@ -103,7 +103,7 @@ export default function QrcodePage() {
 
         {/* Tabela de QRCodes */}
         {/* Adicionadas as classes h-96 e overflow-auto para altura fixa e rolagem */}
-        <div className="bg-white rounded-xl shadow p-4 w-full md:w-1/2 flex flex-col">
+        <div className="bg-white rounded-xl shadow p-4 w-full md:w-1/1 flex flex-col">
           <h1 className="text-lg font-bold mb-2 text-gray-800">
             QR CODE GENERATED
           </h1>
@@ -131,7 +131,6 @@ export default function QrcodePage() {
                   <th className="px-2 py-2">STATUS</th>
                   <th className="px-2 py-2">CREATE DATE</th>
                   <th className="px-2 py-2"></th>
-                  <th className="px-2 py-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -158,31 +157,31 @@ export default function QrcodePage() {
                     </td>
                     <td className="px-2 py-1 flex gap-2">
                       <button
-                        className="text-xs bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setLoadingModal(true);
-                          setShowEditModal(true);
-                          setTimeout(() => {
-                            setEditData(qrcode);
-                            setLoadingModal(false);
-                          }, 500);
-                        }}
-                      >
+                            className="text-xs bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLoadingModal(true);
+                              setShowEditModal(true);
+                              setTimeout(() => {
+                                setEditData(qrcode);
+                                setLoadingModal(false);
+                              }, 500);
+                            }}
+                          >
                         Edit
                       </button>
                       <button
-                        className="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const confirmed = confirm(
-                            `Tem certeza que deseja deletar o QR Code "${qrcode.name}"?`
-                          );
-                          if (confirmed) {
-                            deleteQrcode(qrcode.id);
-                          }
-                        }}
-                      >
+                            className="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const confirmed = confirm(
+                                `Tem certeza que deseja deletar o QR Code "${qrcode.name}"?`
+                              );
+                              if (confirmed) {
+                                deleteQrcode(qrcode.id);
+                              }
+                            }}
+                          >
                         Delete
                       </button>
                     </td>
@@ -198,7 +197,7 @@ export default function QrcodePage() {
       <ModalQrcode
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        loading={loadingModal}
+        // loading={loadingModal}
         data={editData}
         setLoadingModal={setLoadingModal}
         fetchData={fetchData}
