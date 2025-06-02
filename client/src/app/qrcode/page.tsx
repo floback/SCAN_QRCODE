@@ -1,15 +1,5 @@
 "use client";
 
-import {
-  QrCode as QrCodeIcon,
-  ScanLine,
-  Trophy,
-  MapPin,
-  Search,
-} from "lucide-react";
-import InfoCard from "@/components/Card";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
 import ScanTable from "@/components/ScanTable";
 import QrcodeForm from "@/components/QrcodeForm";
 import QrcodeTable from "@/components/QrcodeTable";
@@ -18,6 +8,8 @@ import { useQrcodeData } from "./hook/useQrcode";
 import ModalQrcode from "@/components/ModalQrcode";
 import { useState } from "react";
 import { QrCode } from "@/app/qrcode/types/types";
+import InfoCard from "@/components/Card";
+import { MapPin, QrCodeIcon, ScanLine, Trophy } from "lucide-react";
 
 export default function QrcodePage() {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -84,6 +76,18 @@ export default function QrcodePage() {
         fetchData={fetchData}
       />
 
+            {/* Cards de estatísticas */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
+        <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />
+        <InfoCard
+          title="CODE PLUS SCANNING"
+          value={mostScannedCode || "-"}
+          icon={Trophy}
+        />
+        <InfoCard title="SCANNING CITY" value={topCity || "-"} icon={MapPin} />
+      </div>
+      
       {/* Cards de estatísticas */}
       <ScanTable data={data} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
