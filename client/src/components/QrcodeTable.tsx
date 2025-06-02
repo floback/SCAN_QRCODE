@@ -53,7 +53,7 @@ export default function QrcodeTable({
               <tr key={qrcode.id} className="border-b border-gray-200">
                 <td className="px-2 py-1 text-xs">{qrcode.name || "-"}</td>
                 <td className="px-2 py-1">
-                  <img src={qrcode.img} alt="QR Code" className="h-12 w-12 object-contain" />
+                  <img src={qrcode.img} alt="QR Code" className="h-11 w-11 object-contain" />
                 </td>
                 <td className="px-2 py-1 text-blue-600 underline text-xs max-w-xs truncate">
                   <a href={qrcode.link_add} target="_blank" rel="noopener noreferrer">{qrcode.link_add}</a>
