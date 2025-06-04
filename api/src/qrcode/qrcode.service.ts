@@ -34,8 +34,14 @@ export class QrcodeService {
     const backendBaseUrl = process.env.BASE_URL || 'https://54d8-132-255-43-78.ngrok-free.app';
     const qrRedirectLink = `${backendBaseUrl}/scan/${uniqueCode}`;
   
-    const img = await QRCode.toDataURL(qrRedirectLink);
-  
+    const img = await QRCode.toDataURL(qrRedirectLink, {
+      errorCorrectionLevel: 'H', // Alta correção de erro (mais seguro)
+      type: 'image/png',
+      scale: 20, // ⬅️ Isso define a resolução (quanto maior, mais qualidade)
+      margin: 2,
+      width: 500, // ⬅️ Alternativa ou complemento ao scale (define o tamanho final)
+    });
+ 
     const qrcode = this.qrcodeRepository.create({
       id_user,
       code: uniqueCode,

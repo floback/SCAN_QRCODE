@@ -88,43 +88,44 @@ export default function QrcodeTable({
                     : "-"}
                 </td>
                 <td className="px-2 py-2 text-center-1 text-center">
-  <div className="flex gap-2 justify-center">
-    <button
-      className="text-xs bg-yellow-400 text-white px-3 py-2 rounded hover:bg-yellow-500"
-      onClick={(e) => {
-        e.stopPropagation();
-        setLoadingModal(true);
-        setShowEditModal(true);
-        setTimeout(() => {
-          setEditData(qrcode);
-          setLoadingModal(false);
-        }, 500);
-      }}
-    >
-      Edit
-    </button>
-    <button
-      className="text-xs bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600"
-      onClick={(e) => {
-        e.stopPropagation();
-        if (confirm(`Deseja deletar o QR Code "${qrcode.name}"?`)) {
-          deleteQrcode(qrcode.id);
-        }
-      }}
-    >
-      Delete
-    </button>
-    <a
-      href={qrcode.img}
-      download={`qrcode-${qrcode.name || "download"}.png`}
-      className="text-xs bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600"
-      onClick={(e) => e.stopPropagation()}
-    >
-      Download
-    </a>
-  </div>
-</td>
-
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      className="text-xs bg-yellow-400 text-white px-3 py-2 rounded hover:bg-yellow-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLoadingModal(true);
+                        setShowEditModal(true);
+                        setTimeout(() => {
+                          setEditData(qrcode);
+                          setLoadingModal(false);
+                        }, 500);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-xs bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (
+                          confirm(`Deseja deletar o QR Code "${qrcode.name}"?`)
+                        ) {
+                          deleteQrcode(qrcode.id);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                    <a
+                      href={qrcode.img}
+                      download={`qrcode-${qrcode.name || "download"}.png`}
+                      className="text-xs bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Download
+                    </a>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
