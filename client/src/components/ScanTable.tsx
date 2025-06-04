@@ -48,7 +48,7 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
         </thead>
         <tbody>
           {data.map((entry) => (
-            <tr key={entry.id} className="border-b border-gray-200">
+            <tr key={entry.id} className="border-b border-gray-200 odd:bg-white even:bg-gray-50 hover:bg-cyan-100 transition-colors duration-200">
               <td className="px-2 py-1">{entry.ip}</td>
               <td className="px-2 py-1">{entry.country}</td>
               <td className="px-2 py-1">{entry.city}</td>

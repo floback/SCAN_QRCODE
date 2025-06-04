@@ -52,7 +52,8 @@ export default function QrcodeTable({
           </thead>
           <tbody>
             {dataQrcode.map((qrcode) => (
-              <tr key={qrcode.id} className="border-b border-gray-200">
+              <tr key={qrcode.id} className="border-b border-gray-200 odd:bg-white even:bg-gray-50 hover:bg-cyan-100 transition-colors duration-200">
+
                 <td className="px-2 py-2  text-center-1 text-xs">
                   {qrcode.name || "-"}
                 </td>
