@@ -8,7 +8,6 @@ import {
   deleteQrcode as deleteQrcodeApi,
   updateQrcode as updateQrcodeApi,
 } from "../service/service.qrcode";
-import { data } from "framer-motion/client";
 
 export function useQrcodeData() {
   const [dataQrcode, setData] = useState<QrCode[]>([]);
@@ -32,9 +31,12 @@ export function useQrcodeData() {
     try {
       const created = await createQrcodeApi(newQrcode);
       if (created) setData((prev) => [...prev, created]);
+      return created;
     } catch (err: any) {
       setError(err.message);
+      
     }
+    
   };
 
   const updateQrcode = async (id: string, updatedData: Partial<QrCode>) => {

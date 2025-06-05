@@ -37,7 +37,7 @@ export class QrcodeService {
     const img = await QRCode.toDataURL(qrRedirectLink, {
       errorCorrectionLevel: 'H', // Alta correção de erro (mais seguro)
       type: 'image/png',
-      scale: 20, // ⬅️ Isso define a resolução (quanto maior, mais qualidade)
+      scale: 10, // ⬅️ Isso define a resolução (quanto maior, mais qualidade)
       margin: 2,
       width: 500, // ⬅️ Alternativa ou complemento ao scale (define o tamanho final)
     });
@@ -51,7 +51,7 @@ export class QrcodeService {
       number_fone,
       name, 
     });
-  
+    console.log(qrcode)
     return await this.qrcodeRepository.save(qrcode);
   }
   

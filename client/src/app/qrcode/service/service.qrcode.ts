@@ -17,7 +17,6 @@ export const createQrcode = async (
   );
 };
 
-
 // Buscar todos os QR Codes
 export const getAllQrcodes = async (): Promise<QrCode[] | null> => {
   return await fetchWithAuth<QrCode[]>(
@@ -46,10 +45,10 @@ export const deleteQrcode = async (
 ): Promise<boolean> => {
   const result = await fetchWithAuth(
     `${process.env.NEXT_PUBLIC_API_URL}/qrcode/${id}`,
-    { 
+    {
       method: "DELETE",
       body: JSON.stringify(deleteQrcode),
-     }
+    }
   );
   return result !== null;
 };

@@ -18,6 +18,9 @@ export default function QrcodePage() {
   const [linkAdd, setLinkAdd] = useState("");
   const [name, setName] = useState("");
   const [numberFone, setNumberFone, ] = useState("");
+  const [generatedQrcode, setGeneratedQrcode] = useState<QrCode | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
 
   const { 
     dataQrcode,
@@ -52,6 +55,8 @@ export default function QrcodePage() {
             numberFone={numberFone}
             setNumberFone={setNumberFone}
             createQrcode={createQrcode}
+            setGeneratedQrcode={setGeneratedQrcode}
+            setModalVisible={setModalVisible}
           />
 
         {/* Tabela de QRCodes */}
@@ -70,7 +75,7 @@ export default function QrcodePage() {
       <ModalQrcode
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        // loading={loadingModal}
+        loading={loadingModal}
         data={editData}
         setLoadingModal={setLoadingModal}
         fetchData={fetchData}

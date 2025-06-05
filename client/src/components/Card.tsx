@@ -7,7 +7,7 @@ interface InfoCardProps {
   title: string;
   value: string | number;
   icon: LucideIcon;
-  bgColor?: string; // Tailwind class
+  bgColor?: string; 
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ title, value, icon: Icon, bgColor = "bg-blue-500" }) => {
