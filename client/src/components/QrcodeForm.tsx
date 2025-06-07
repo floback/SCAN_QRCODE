@@ -55,36 +55,42 @@ export default function QrcodeForm({
         <Button typeStyle="secondary" size="small" onClick={handleSubmit}>Generate</Button>
       </div>
 
-      {/* Modal */}
-      {modalVisible && generatedQrcode && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-            <h2 className="text-lg font-bold mb-4 text-gray-700">QR Code Gerado com Sucesso</h2>
-            <img
-              src={
-                 generatedQrcode.img.startsWith("data:image")
-                  ? generatedQrcode.img
-                  : `data:image/png;base64,${generatedQrcode.img}`
-              }
-              alt="QR Code"
-              className="mx-auto h-48 w-48 object-contain mb-4"
-            />
-            <a
-              href={generatedQrcode.img}
-              download={`qrcode-${generatedQrcode.name || "download"}.png`}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
-            >
-              Download QR Code
-            </a>
-            <button
-              className="mt-4 text-sm text-gray-500 hover:underline block mx-auto"
-              onClick={() => setModalVisible(false)}
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
+    {/* Modal */}
+{modalVisible && generatedQrcode && (
+  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40">
+    <div className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-xl focus:outline-none">
+      <h2 className="text-xl text-cyan-800 font-bold mb-4 text-center">
+        QR Code Gerado com Sucesso
+      </h2>
+      <img
+        src={
+          generatedQrcode.img.startsWith("data:image")
+            ? generatedQrcode.img
+            : `data:image/png;base64,${generatedQrcode.img}`
+        }
+        alt="QR Code"
+        className="mx-auto h-48 w-48 object-contain mb-4"
+      />
+
+      <div className="flex flex-col items-center gap-2">
+        <a
+          href={generatedQrcode.img}
+          download={`qrcode-${generatedQrcode.name || "download"}.png`}
+          className="bg-green-600 text-white px-4 py-3 hover:bg-green-700 text-sm rounded-md text-center"
+        >
+          Download QR Code
+        </a>
+        <button
+          className="text-sm text-gray-500 hover:underline"
+          onClick={() => setModalVisible(false)}
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 }
