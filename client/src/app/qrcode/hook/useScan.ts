@@ -20,7 +20,7 @@ export function useScanData() {
       setLoading(true);
       setError(null);
       try {
-        const rawData = await fetchScanData();
+        const rawData = await fetchScanData() ;
 
         const uniqueCodeIds = new Set(rawData.map((item) => item.id_qrcode));
         setTotalCodes(uniqueCodeIds.size);

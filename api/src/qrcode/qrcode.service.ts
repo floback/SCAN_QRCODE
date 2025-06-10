@@ -31,9 +31,9 @@ export class QrcodeService {
       finalLink = `https://wa.me/${number_fone}`;
     }
   
-    const backendBaseUrl = process.env.BASE_URL || 'https://54d8-132-255-43-78.ngrok-free.app';
-    const qrRedirectLink = `${backendBaseUrl}/scan/${uniqueCode}`;
-  
+    const backendBaseUrl = process.env.BASE_URL || 'https://c63f-132-255-43-198.ngrok-free.app';
+    const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
+    console.log(qrRedirectLink)
     const img = await QRCode.toDataURL(qrRedirectLink, {
       errorCorrectionLevel: 'H', // Alta correção de erro (mais seguro)
       type: 'image/png',
@@ -54,6 +54,7 @@ export class QrcodeService {
     console.log(qrcode)
     return await this.qrcodeRepository.save(qrcode);
   }
+  
   
   
   // Método para encontrar um QRCode por ID

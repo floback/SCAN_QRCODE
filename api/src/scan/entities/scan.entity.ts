@@ -1,17 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, RelationId } from 'typeorm';
 import { QrcodeEntity } from '../../qrcode/entities/qrcode.entity';
 
 @Entity('scan_logs')
 export class ScanEntity {
-  @PrimaryGeneratedColumn('uuid')
+ @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => QrcodeEntity, (qrcode) => qrcode.id, { onDelete: 'SET NULL' })
+  @ManyToOne(() => QrcodeEntity, { eager: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'id_qrcode' })
   qrcode: QrcodeEntity;
 
-  
-  @Column()
+  @RelationId((scan: ScanEntity) => scan.qrcode)
   id_qrcode: string;
 
   @Column()

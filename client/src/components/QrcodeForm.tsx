@@ -2,6 +2,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { Dispatch, SetStateAction, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import { CloudDownload, DoorClosed, X} from "lucide-react"
 
 interface Props {
   linkAdd: string;
@@ -76,15 +77,15 @@ export default function QrcodeForm({
         <a
           href={generatedQrcode.img}
           download={`qrcode-${generatedQrcode.name || "download"}.png`}
-          className="bg-green-600 text-white px-4 py-3 hover:bg-green-700 text-sm rounded-md text-center"
+          className="bg-green-600 text-white px-10 py-3 hover:bg-green-700 rounded text-center"
         >
-          Download QR Code
+          <CloudDownload />
         </a>
         <button
-          className="text-sm text-gray-500 hover:underline"
+          className="bg-red-600 text-white px-10 py-2 hover:bg-green-700 rounded text-center"
           onClick={() => setModalVisible(false)}
         >
-          Fechar
+          <X/>
         </button>
       </div>
     </div>

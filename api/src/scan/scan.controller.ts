@@ -10,102 +10,74 @@ import { JwtAuthGuard } from 'src/auth/guard/jtw-auth-guard';
 
 @Controller('scan')
 export class ScanController {
-  constructor(private readonly scanService: ScanService) { }
+  constructor(private readonly scanService: ScanService) {}
 
-  @Get(':Id')
+  @Get('redirect/:qrId')
   async handleScanGet(@Req() req: Request, @Param('qrId') qrId: string, @Res() res: Response) {
+    console.log('[Router] GET /scan/redirect/' + qrId);
+
     const rawIp =
       req.headers['x-forwarded-for']?.toString().split(',')[0].trim() ||
       req.socket.remoteAddress ||
       '127.0.0.1';
-
     const ipString = typeof rawIp === 'string' ? rawIp : '';
     const geo = geoip.lookup(ipString) as Lookup | null;
 
-    console.log('🔎 IP:', ipString);
-    console.log('🌍 Geo:', geo);
+    console.log('🔎 IP do scanner:', ipString, ' Geo:', geo);
 
     const qr = await this.scanService.findByCode(qrId);
     if (!qr) {
+      console.warn(`[ScanController] QR code "${qrId}" não encontrado.`);
       return res.status(404).send('QR Code não encontrado!');
     }
 
     const latitude = geo?.ll?.[0] ?? null;
     const longitude = geo?.ll?.[1] ?? null;
 
-    const scanData = {
-      id_qrcode: qr.id,
-      ip: ipString,
-      country: geo?.country || 'Desconhecido',
-      city: geo?.city || 'Desconhecida',
-      region: geo?.region || 'Desconhecida',
-      latitude,
-      longitude,
-    };
+    const scanData = { id_qrcode: qr.id, ip: ipString, country: geo?.country || 'Desconhecido', city: geo?.city || 'Desconhecida', region: geo?.region || 'Desconhecida', latitude, longitude };
 
-    const redirectTo = qr.number_fone
-      ? `https://wa.me/${qr.number_fone}`
-      : qr.link_add;
+    const redirectTo = qr.number_fone ? `https://wa.me/${qr.number_fone}` : qr.link_add;
 
     return res.send(`
       <html>
-        <head>
-          <title>Redirecionando...</title>
-          <meta charset="utf-8" />
-          <style>
-            body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-          </style>
-        </head>
-        <body>
+        <head><meta charset="utf-8"><title>Redirecionando...</title></head>
+        <body style="font-family:sans-serif;text-align:center;margin-top:50px">
           <h2>QR Code escaneado com sucesso!</h2>
           <p><strong>IP:</strong> ${scanData.ip}</p>
-          <p><strong>Localização estimada:</strong> ${scanData.city}, ${scanData.region} - ${scanData.country}</p>
-          <p><strong>Latitude:</strong> ${scanData.latitude ?? 'Não disponível'}</p>
-          <p><strong>Longitude:</strong> ${scanData.longitude ?? 'Não disponível'}</p>
-          <p>Redirecionando em instantes...</p>
-
+          <p><strong>Localização:</strong> ${scanData.city}, ${scanData.region} - ${scanData.country}</p>
+          <p><strong>Coords:</strong> ${scanData.latitude}, ${scanData.longitude}</p>
+          <p>Redirecionando em 2s...</p>
           <script>
             fetch('/scan/save', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(${JSON.stringify(scanData)})
-            }).then(res => res.json())
-              .then(data => {
-                console.log('📍 Dados salvos com sucesso:', data);
-              })
-              .catch(err => {
-                document.body.innerHTML += '<p style="color:red;">Erro ao salvar localização: ' + err + '</p>';
-              });
-
-            setTimeout(() => {
-              window.location.href = '${redirectTo}';
-            }, 2000);
+            })
+            .then(res => res.json()).then(console.log)
+            .catch(err => document.body.innerHTML += '<p>Erro ao salvar: ' + err + '</p>');
+            setTimeout(()=>window.location.href= redirectTo ,3000);
           </script>
         </body>
       </html>
     `);
   }
 
-
   @Post('save')
-  async handleGpsSave(@Body() body: any) {
-    const saved = await this.scanService.create(body);
-    console.log('📍 Dados de scan salvos:', saved);
-    return { message: 'Localização registrada com sucesso!', data: saved };
+  async handleGpsSave(@Body() body: any, @Res() res: Response) {
+    try {
+      console.log('[ScanController] Salvando scan:', body);
+      const saved = await this.scanService.create(body);
+      return res.status(201).json({ message: 'Scan registrado!', data: saved });
+    } catch (err) {
+      console.error('[ScanController] Erro ao salvar scan:', err);
+      return res.status(500).json({ message: 'Erro ao registrar scan.' });
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
-  @Get()
-  async getAllScans() {
-    return await this.scanService.findAll();
-  }
-
-  @Get('find/join')
+  @Get('join')
   async findAllJoin(): Promise<any[]> {
     const scans = await this.scanService.findAllJoin();
-
-    return scans.map((scan) => ({
+    return scans.map(scan => ({
       id: scan.id,
       ip: scan.ip,
       country: scan.country,
@@ -115,28 +87,28 @@ export class ScanController {
       longitude: scan.longitude,
       create_date: scan.create_date,
       name: scan.qrcode?.name,
-      link_add: scan.qrcode?.link_add,
+      link_add: scan.qrcode?.link_add
     }));
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
-  @Get(':id')
-  async getScanById(@Param('id') id: string) {
-    return await this.scanService.findById(id);
-  }
-
-  @Get('find/:id')
+  @Get('id/:id')
   @UseGuards(JwtAuthGuard)
   @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
   async findById(@Param('id') id: string) {
     return await this.scanService.findById(id);
-}
+  }
 
+  @Delete('id/:id')
   @UseGuards(JwtAuthGuard)
   @Roles(Role.OWNER, Role.ADMIN, Role.USER)
-  @Delete(':id')
   async deleteScan(@Param('id') id: string) {
     return await this.scanService.delete(id);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @Roles(Role.OWNER, Role.ADMIN, Role.USER, Role.VIWER)
+  async getAllScans() {
+    return await this.scanService.findAll();
   }
 }
