@@ -21,12 +21,12 @@ export default function QrcodeTable({
   deleteQrcode,
 }: Props) {
   return (
-    <div className="bg-white rounded-xl shadow p-4 w-full flex flex-col">
+    <div className="bg-white rounded-xl shadow p-2 w-full flex flex-col">
       <h1 className="text-lg font-bold mb-2 text-gray-800">
         QR CODE GENERATED
       </h1>
       <div className="bg-white rounded-md shadow p-2 w-full max-w-sm mb-2 mr-auto">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Search className="text-gray-400 w-4 h-4" />
           <input
             type="text"

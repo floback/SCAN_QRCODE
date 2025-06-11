@@ -48,7 +48,7 @@ export default function QrcodeForm({
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-3 w-full md:w-1/3">
+      <div className="bg-white rounded-xl shadow p-2 flex flex-col gap-3 w-full md:w-1/3">
         <h1 className="text-xl font-bold mb-4 text-gray-700">GENERATE QR CODE</h1>
         <Input label="Enter Link" value={linkAdd} onChange={(e) => setLinkAdd(e.target.value)} placeholder="Ex: https://wa.me/..." />
         <Input label="Enter Name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Comercial Lote XV" />
