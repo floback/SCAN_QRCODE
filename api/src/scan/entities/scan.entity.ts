@@ -6,7 +6,7 @@ export class ScanEntity {
  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => QrcodeEntity, { eager: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => QrcodeEntity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'id_qrcode' })
   qrcode: QrcodeEntity;
 

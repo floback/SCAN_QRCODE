@@ -1,7 +1,6 @@
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { Dispatch, SetStateAction, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 import { CloudDownload, DoorClosed, X} from "lucide-react"
 
 interface Props {

@@ -6,6 +6,10 @@ export class CreateQrcodeDto {
 
   @IsOptional()
   @IsString()
+  id: string;
+
+  @IsOptional()
+  @IsString()
   name?: string;
   
   @IsOptional()

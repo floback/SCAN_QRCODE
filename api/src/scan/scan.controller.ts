@@ -66,7 +66,7 @@ export class ScanController {
   async handleGpsSave(@Body() body: any, @Res() res: Response) {
     try {
       console.log('[ScanController] Salvando scan:', body);
-      const saved = await this.scanService.create(body);
+      const saved = await this.scanService.createScan(body);
       return res.status(201).json({ message: 'Scan registrado!', data: saved });
     } catch (err) {
       console.error('[ScanController] Erro ao salvar scan:', err);
@@ -78,17 +78,25 @@ export class ScanController {
   async findAllJoin(): Promise<any[]> {
     const scans = await this.scanService.findAllJoin();
     return scans.map(scan => ({
-      id: scan.id,
-      ip: scan.ip,
-      country: scan.country,
-      city: scan.city,
-      region: scan.region,
-      latitude: scan.latitude,
-      longitude: scan.longitude,
-      create_date: scan.create_date,
-      name: scan.qrcode?.name,
-      link_add: scan.qrcode?.link_add
-    }));
+  id: scan.id,
+  ip: scan.ip,
+  country: scan.country,
+  city: scan.city,
+  region: scan.region,
+  latitude: scan.latitude,
+  longitude: scan.longitude,
+  create_date: scan.create_date,
+  qrcode: scan.qrcode
+    ? {
+        id: scan.qrcode.id,
+        name: scan.qrcode.name,
+        link_add: scan.qrcode.link_add,
+        status: scan.qrcode.status,
+        type: scan.qrcode.type,
+        created_by: scan.qrcode.created_by,
+      }
+    : null
+}));
   }
 
   @Get('id/:id')

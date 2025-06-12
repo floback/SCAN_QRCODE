@@ -1,20 +1,9 @@
 "use client";
 
 import { Search } from "lucide-react";
-
-interface ScanEntry {
-  id: number;
-  ip: string;
-  country: string;
-  city: string;
-  region: string;
-  name?: string;
-  link_add: string;
-  create_date: string;
-}
-
+import { ScanQrCode } from "@/app/qrcode/types/types"
 interface ScanTableProps {
-  data: ScanEntry[];
+  data: ScanQrCode[];
   searchTerm: string;
   setSearchTerm: (value: string) => void;
 }
@@ -60,7 +49,7 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
                 <td className="px-2 py-2 text-center-1 text-xs">{entry.country}</td>
                 <td className="px-2 py-2 text-center-1 text-xs">{entry.city}</td>
                 <td className="px-2 py-2 text-center-1 text-xs">{entry.region}</td>
-                <td className="px-2 py-2 text-center-1 text-xs">{entry.name || "-"}</td>
+                <td className="px-2 py-2 text-center-1 text-xs">{entry.name}</td>
                 <td className="px-2 py-2 text-center-1 text-blue-600 underline text-xs max-w-xs truncate">
                   <a
                     href={entry.link_add}

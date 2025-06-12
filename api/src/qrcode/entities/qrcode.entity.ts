@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { Expose } from 'class-transformer';
 
+@Expose()
 @Entity('qrcode')
 export class QrcodeEntity {
 
@@ -19,7 +21,7 @@ export class QrcodeEntity {
   @Column({ type: 'boolean', default: true })
   status: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   number_fone: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })

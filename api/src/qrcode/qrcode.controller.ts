@@ -21,7 +21,7 @@ export class QrcodeController {
     @Request() req,
     @Body() createQrcodeDto: CreateQrcodeDto,
   ): Promise<QrcodeEntity> {
-    const id_user = req.user.sub; // compatível com payloads diferentes
+    const id_user = req.user.sub;
     const { number_fone, link_add, name } = createQrcodeDto;
     return this.qrcodeService.createQRCode(id_user, number_fone, link_add, name);
   }
@@ -47,7 +47,6 @@ export class QrcodeController {
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.OWNER, Role.ADMIN, Role.USER)
-  @Delete(':id')
   @Delete(':id')
   async deleteQrcode(@Param('id') id: string) {
     await this.qrcodeService.delete(id);

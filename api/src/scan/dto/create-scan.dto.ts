@@ -3,7 +3,7 @@ import { IsOptional, IsString, IsNumber, IsUUID } from 'class-validator';
 
 export class ScanDto {
   @IsUUID()
-  qrId: string;
+  id_qrcode: string;
 
   @IsString()
   ip: string;
