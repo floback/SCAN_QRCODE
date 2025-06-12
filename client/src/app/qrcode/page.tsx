@@ -81,7 +81,7 @@ export default function QrcodePage() {
         fetchData={fetchData}
       />
 
-            {/* Cards de estatísticas */}
+      {/* Cards de estatísticas */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
         <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
         <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />

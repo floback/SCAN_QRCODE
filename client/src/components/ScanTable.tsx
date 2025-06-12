@@ -21,12 +21,12 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm px-2 py-2 text-center-1"
+            className="w-full border-none outline-none bg-transparent text-gray-700 text-sm placeholder:text-sm px-1 py-1 text-center-1"
           />
         </div>
       </div>
 
-      <div className="h-[96] overflow-auto flex-grow">
+      <div className="h-[150] overflow-auto flex-grow">
         <table className="min-w-full text-sm text-center text-gray-600">
           <thead className="bg-gray-100 text-xs uppercase text-gray-500 sticky top-0">
             <tr>

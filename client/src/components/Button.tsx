@@ -25,6 +25,9 @@ export default function Button({
   const sizeStyles = {
     default: "px-6 py-3 text-lg",
     small: "px-4 py-2 text-sm",
+     sm: "px-2 py-1 text-sm",
+    md: "px-4 py-2 text-base",
+    lg: "px-5 py-3 text-lg",
   };
 
   const typeStyles = {
