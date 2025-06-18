@@ -15,8 +15,8 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
     entry.country?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     entry.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     entry.region?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    entry.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    entry.link_add?.toLowerCase().includes(searchTerm.toLowerCase())
+    entry.qrcode?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    entry.qrcode?.link_add?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -46,6 +46,7 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
               <th className="px-2 py-2">REGION</th>
               <th className="px-2 py-2">CODE NAME</th>
               <th className="px-2 py-2">LINK ADD</th>
+              <th className="px-2 py-2">STATUS</th>
               <th className="px-2 py-2">DATE AND TIME</th>
             </tr>
           </thead>
@@ -59,16 +60,23 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
                 <td className="px-2 py-2 text-xs">{entry.country ?? "N/A"}</td>
                 <td className="px-2 py-2 text-xs">{entry.city ?? "N/A"}</td>
                 <td className="px-2 py-2 text-xs">{entry.region ?? "N/A"}</td>
-                <td className="px-2 py-2 text-xs">{entry.name ?? "N/A"}</td>
+                <td className="px-2 py-2 text-xs">{entry.qrcode?.name ?? "N/A"}</td>
                 <td className="px-2 py-2 text-blue-600 underline text-xs max-w-xs truncate">
                   <a
-                    href={entry.link_add ?? "#"}
+                    href={entry.qrcode?.link_add ?? "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    title={entry.link_add}
+                    title={entry.qrcode?.link_add}
                   >
-                    {entry.link_add ?? "N/A"}
+                    {entry.qrcode?.link_add ?? "N/A"}
                   </a>
+                </td>
+               <td className="px-2 py-2 text-center-1">
+                  <span
+                    className={`inline-block w-3 h-3 rounded-full mx-auto ${
+                      entry.qrcode?.status ? "bg-green-500" : "bg-gray-400"
+                    }`}
+                  ></span>
                 </td>
                 <td className="px-2 py-2 text-xs">
                   {entry.create_date

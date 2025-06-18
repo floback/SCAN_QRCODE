@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "Page Auth",
         "New Inputs app",
-        "Qrcode"
+        "Qrcode",
+        "ScanTable"
     ]
 }
