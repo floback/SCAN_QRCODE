@@ -40,12 +40,6 @@ export class ScanService {
   }
 
   // find All scan join qrcode
-//   async findAllJoin(): Promise<any[]> {
-//   return this.scanRepository.find({
-//     relations: ["qrcode"],
-//     order: { create_date: "DESC" },
-//   });
-// }
 async findAllJoin(): Promise<any[]> {
   return this.scanRepository
     .createQueryBuilder('scan')

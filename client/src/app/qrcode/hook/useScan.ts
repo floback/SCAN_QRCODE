@@ -21,6 +21,7 @@ export function useScanData() {
       setError(null);
       try {
         const rawData: ScanQrCode[] = await fetchScanData();
+        console.log("Dados recebidos:", rawData);
         if (!rawData || !Array.isArray(rawData)) {
           throw new Error("Dados inválidos retornados da API");
         }
@@ -62,7 +63,7 @@ export function useScanData() {
 
   const filteredData = useMemo(() => {
     return data.filter((entry) =>
-      [entry.city, entry.region, entry.ip, entry.code_name]
+      [entry.city, entry.region, entry.ip, entry.name]
         .some((value) =>
           String(value || "").toLowerCase().includes(searchTerm.toLowerCase())
         )

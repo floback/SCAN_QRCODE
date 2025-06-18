@@ -9,7 +9,7 @@ export interface ScanQrCode {
   longitude: string;
   create_date: string;
   name: string | null;
-  link_add: string;
+  link_add: string | null;
   status: boolean
   number_fone: string;
 }
