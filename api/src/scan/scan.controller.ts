@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/auth/guard/jtw-auth-guard';
 
 @Controller('scan')
 export class ScanController {
-  constructor(private readonly scanService: ScanService) {}
+  constructor(private readonly scanService: ScanService) { }
 
   @Get('redirect/:qrId')
   async handleScanGet(@Req() req: Request, @Param('qrId') qrId: string, @Res() res: Response) {
@@ -38,28 +38,109 @@ export class ScanController {
 
     const redirectTo = qr.number_fone ? `https://wa.me/${qr.number_fone}` : qr.link_add;
 
-    return res.send(`
-      <html>
-        <head><meta charset="utf-8"><title>Redirecionando...</title></head>
-        <body style="font-family:sans-serif;text-align:center;margin-top:50px">
-          <h2>QR Code escaneado com sucesso!</h2>
-          <p><strong>IP:</strong> ${scanData.ip}</p>
-          <p><strong>Localização:</strong> ${scanData.city}, ${scanData.region} - ${scanData.country}</p>
-          <p><strong>Coords:</strong> ${scanData.latitude}, ${scanData.longitude}</p>
-          <p>Redirecionando em 2s...</p>
-          <script>
-            fetch('/scan/save', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(${JSON.stringify(scanData)})
-            })
-            .then(res => res.json()).then(console.log)
-            .catch(err => document.body.innerHTML += '<p>Erro ao salvar: ' + err + '</p>');
-            setTimeout(()=>window.location.href= redirectTo ,3000);
-          </script>
-        </body>
-      </html>
-    `);
+return res.send(`
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecionando...</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #cffafe; /* cyan-100 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #0f172a;
+        text-align: center;
+      }
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 90%;
+      }
+      h2 {
+        color: #0e7490;
+        margin-bottom: 1rem;
+      }
+      p {
+        margin: 0.5rem 0;
+      }
+      .timer {
+        font-size: 2rem;
+        margin-top: 1rem;
+        font-weight: bold;
+        color: #0891b2;
+      }
+      .fallback-button {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #06b6d4;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+      .fallback-button:hover {
+        background-color: #0891b2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>✅ QR Code escaneado com sucesso!</h2>
+      <p><strong>IP:</strong> ${scanData.ip}</p>
+      <p><strong>Localização:</strong> ${scanData.city}, ${scanData.region} - ${scanData.country}</p>
+      <p><strong>Coordenadas:</strong> ${scanData.latitude}, ${scanData.longitude}</p>
+      <p>Você será redirecionado em <span id="countdown">3</span> segundos...</p>
+      <div class="timer">⏳</div>
+      <a href="${redirectTo}" class="fallback-button">Clique aqui se não for redirecionado</a>
+    </div>
+
+    <script>
+      const countdownElement = document.getElementById('countdown');
+      let seconds = 3;
+
+      console.log("🔁 Redirecionando para:", "${redirectTo}");
+
+      const interval = setInterval(() => {
+        seconds--;
+        countdownElement.innerText = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      fetch('/scan/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(${JSON.stringify(scanData)})
+      })
+      .then(res => res.json())
+      .then(data => console.log("✅ Dados do scan salvos:", data))
+      .catch(err => {
+        console.error("❌ Erro ao salvar o scan:", err);
+        document.body.innerHTML += '<p style="color:red">Erro ao salvar o scan: ' + err + '</p>';
+      });
+
+      setTimeout(() => {
+        window.location.href = "${redirectTo}";
+      }, 3000);
+    </script>
+  </body>
+  </html>
+`);
+
   }
 
   @Post('save')
@@ -78,25 +159,25 @@ export class ScanController {
   async findAllJoin(): Promise<any[]> {
     const scans = await this.scanService.findAllJoin();
     return scans.map(scan => ({
-  id: scan.id,
-  ip: scan.ip,
-  country: scan.country,
-  city: scan.city,
-  region: scan.region,
-  latitude: scan.latitude,
-  longitude: scan.longitude,
-  create_date: scan.create_date,
-  qrcode: scan.qrcode
-    ? {
-        id: scan.qrcode.id,
-        name: scan.qrcode.name,
-        link_add: scan.qrcode.link_add,
-        status: scan.qrcode.status,
-        type: scan.qrcode.type,
-        created_by: scan.qrcode.created_by,
-      }
-    : null
-}));
+      id: scan.id,
+      ip: scan.ip,
+      country: scan.country,
+      city: scan.city,
+      region: scan.region,
+      latitude: scan.latitude,
+      longitude: scan.longitude,
+      create_date: scan.create_date,
+      qrcode: scan.qrcode
+        ? {
+          id: scan.qrcode.id,
+          name: scan.qrcode.name,
+          link_add: scan.qrcode.link_add,
+          status: scan.qrcode.status,
+          type: scan.qrcode.type,
+          created_by: scan.qrcode.created_by,
+        }
+        : null
+    }));
   }
 
   @Get('id/:id')
