@@ -48,10 +48,10 @@ export default function QrcodePage() {
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         {/* Formulário de geração */}
           <QrcodeForm
-            linkAdd={linkAdd}
-            setLinkAdd={setLinkAdd}
             name={name}
             setName={setName}
+            linkAdd={linkAdd}
+            setLinkAdd={setLinkAdd}
             numberFone={numberFone}
             setNumberFone={setNumberFone}
             createQrcode={createQrcode}

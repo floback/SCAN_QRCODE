@@ -3,6 +3,7 @@
         "Page Auth",
         "New Inputs app",
         "Qrcode",
-        "ScanTable"
+        "ScanTable",
+        "Components/QrcodeForm"
     ]
 }

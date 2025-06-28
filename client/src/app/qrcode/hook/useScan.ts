@@ -7,7 +7,6 @@ import { fetchScanData } from "@/app/qrcode/service/service.scan";
 export function useScanData() {
   const [data, setData] = useState<ScanQrCode[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [totalCodes, setTotalCodes] = useState(0);
   const [totalScans, setTotalScans] = useState(0);
   const [mostScannedCode, setMostScannedCode] = useState("");
   const [topRegion, setTopRegion] = useState("");
@@ -24,13 +23,11 @@ export function useScanData() {
         console.log("Dados recebidos:", rawData);
         if (!rawData || !Array.isArray(rawData)) {
           throw new Error("Dados inválidos retornados da API");
+          
         }
 
         setData(rawData);
         setTotalScans(rawData.length);
-
-        const uniqueCodeIds = new Set(rawData.map((item) => item.id_qrcode));
-        // setTotalCodes(uniqueCodeIds.size);
 
         const codeCount = rawData.reduce((acc, item) => {
           acc[item.id_qrcode] = (acc[item.id_qrcode] || 0) + 1;
