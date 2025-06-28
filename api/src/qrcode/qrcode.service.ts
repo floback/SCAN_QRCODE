@@ -18,44 +18,83 @@ export class QrcodeService {
   ) {}
 
  
+  // async createQRCode(
+  //   id_user: string,
+  //   number_fone?: string,
+  //   link_add?: string,
+  //   name?: string,
+  // ): Promise<QrcodeEntity> {
+  //   const uniqueCode = uuidv4();
+  
+  //   let finalLink = link_add;
+  //   if (!finalLink && number_fone) {
+  //     finalLink = `https://wa.me/${number_fone}`;
+  //   }
+  
+  //   const backendBaseUrl = process.env.BASE_URL || 'https://3f44-2804-16a0-2000-3194-3854-bd3e-277a-ab38.ngrok-free.app';
+  //   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
+  //   console.log(qrRedirectLink)
+  //   const img = await QRCode.toDataURL(qrRedirectLink, {
+  //     errorCorrectionLevel: 'H', // Alta correção de erro (mais seguro)
+  //     type: 'image/png',
+  //     scale: 10, // ⬅️ Isso define a resolução (quanto maior, mais qualidade)
+  //     margin: 2,
+  //     width: 500, // ⬅️ Alternativa ou complemento ao scale (define o tamanho final)
+  //   });
+ 
+  //   const qrcode = this.qrcodeRepository.create({
+  //     id_user,
+  //     code: uniqueCode,
+  //     img,
+  //     status: true,
+  //     link_add: link_add,
+  //     number_fone: number_fone,
+  //     name, 
+  //   });
+  //   console.log(qrcode)
+  //   return await this.qrcodeRepository.save(qrcode);
+  // }
+  
+  
   async createQRCode(
     id_user: string,
     number_fone?: string,
     link_add?: string,
     name?: string,
   ): Promise<QrcodeEntity> {
+    
     const uniqueCode = uuidv4();
-  
-    let finalLink = link_add;
-    if (!finalLink && number_fone) {
-      finalLink = `https://wa.me/${number_fone}`;
-    }
-  
-    const backendBaseUrl = process.env.BASE_URL || 'https://3f44-2804-16a0-2000-3194-3854-bd3e-277a-ab38.ngrok-free.app';
-    const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
-    console.log(qrRedirectLink)
-    const img = await QRCode.toDataURL(qrRedirectLink, {
-      errorCorrectionLevel: 'H', // Alta correção de erro (mais seguro)
+    // number fone default
+    const finalNumber = number_fone ?? '0000000000';
+    // se não houver link crie um link do whatsApp com número
+    const finalLink = link_add ?? `https://wa.me/${finalNumber}`;
+
+    const backendBaseUrl = process.env.BASE_URL || `https://3f44-2804-16a0-2000-3194-3854-bd3e-277a-ab38.ngrok-free.app`;
+    const qrRedirecLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
+    
+    //gerar o qrcode em img
+    const img = await QRCode.toDataURL(qrRedirecLink,{
+      errorCorrectionLevel: 'h',
       type: 'image/png',
-      scale: 10, // ⬅️ Isso define a resolução (quanto maior, mais qualidade)
+      scale: 10,
       margin: 2,
-      width: 500, // ⬅️ Alternativa ou complemento ao scale (define o tamanho final)
+      width: 500,
     });
- 
+
+
     const qrcode = this.qrcodeRepository.create({
       id_user,
       code: uniqueCode,
-      img,
+      img: img ?? 'img-indispo.png',
       status: true,
-      link_add: link_add,
-      number_fone: number_fone,
-      name, 
+      link_add: finalLink,
+      number_fone: finalNumber,
+      name: name ?? 'not name',
     });
-    console.log(qrcode)
+
     return await this.qrcodeRepository.save(qrcode);
+
   }
-  
-  
   
   // Método para encontrar um QRCode por ID
   async findById(id: string): Promise<QrcodeEntity | null> {
