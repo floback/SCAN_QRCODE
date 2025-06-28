@@ -30,7 +30,7 @@ export function useScanData() {
         setTotalScans(rawData.length);
 
         const uniqueCodeIds = new Set(rawData.map((item) => item.id_qrcode));
-        setTotalCodes(uniqueCodeIds.size);
+        // setTotalCodes(uniqueCodeIds.size);
 
         const codeCount = rawData.reduce((acc, item) => {
           acc[item.id_qrcode] = (acc[item.id_qrcode] || 0) + 1;
@@ -74,7 +74,6 @@ export function useScanData() {
     data: filteredData,
     searchTerm,
     setSearchTerm,
-    totalCodes,
     totalScans,
     mostScannedCode,
     topRegion,

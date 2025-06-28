@@ -31,13 +31,13 @@ export default function QrcodePage() {
     loading,
     error,
     fetchData,
+    totalCodes,
   } = useQrcodeData();
 
   const {
     data,
     searchTerm,
     setSearchTerm,
-    totalCodes,
     totalScans,
     mostScannedCode,
     topCity,

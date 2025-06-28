@@ -31,7 +31,7 @@ export class QrcodeService {
       finalLink = `https://wa.me/${number_fone}`;
     }
   
-    const backendBaseUrl = process.env.BASE_URL || 'https://e1dc-2804-16a0-2000-2dc9-6b68-1e56-4906-16b1.ngrok-free.app';
+    const backendBaseUrl = process.env.BASE_URL || 'https://3f44-2804-16a0-2000-3194-3854-bd3e-277a-ab38.ngrok-free.app';
     const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
     console.log(qrRedirectLink)
     const img = await QRCode.toDataURL(qrRedirectLink, {

@@ -14,18 +14,24 @@ export function useQrcodeData() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQrcode, setSearchQrcode] = useState("");
+  const [totalCodes, setTotalCodes] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const data = await getAllQrcodes();
-      if (data) setData(data);
+      if (data) {
+        setData(data);
+        setTotalCodes(String(data.length));
+      }
+      
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const createQrcode = async (newQrcode: Partial<QrCode>) => {
     try {
@@ -73,7 +79,8 @@ export function useQrcodeData() {
   
   useEffect(() => {
     fetchData();
-  }, []);
+    setTotalCodes(String(dataQrcode.length));
+  }, [dataQrcode]);
 
   return {
     dataQrcode: filterData,
@@ -85,5 +92,7 @@ export function useQrcodeData() {
     updateQrcode,
     searchQrcode,
     setSearchQrcode,
+    setTotalCodes,
+    totalCodes,
   };
 }
