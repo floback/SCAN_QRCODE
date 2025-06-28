@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { ScanQrCode } from "@/app/qrcode/types/types";
 import { fetchScanData } from "@/app/qrcode/service/service.scan";
 
+// useScan.ts
 export function useScanData() {
   const [data, setData] = useState<ScanQrCode[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,53 +15,51 @@ export function useScanData() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const rawData: ScanQrCode[] = await fetchScanData();
-        console.log("Dados recebidos:", rawData);
-        if (!rawData || !Array.isArray(rawData)) {
-          throw new Error("Dados inválidos retornados da API");
-          
-        }
-
-        setData(rawData);
-        setTotalScans(rawData.length);
-
-        const codeCount = rawData.reduce((acc, item) => {
-          acc[item.id_qrcode] = (acc[item.id_qrcode] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
-        setMostScannedCode(Object.entries(codeCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Nenhum");
-
-        const regionCount = rawData.reduce((acc, item) => {
-          acc[item.region] = (acc[item.region] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
-        setTopRegion(Object.entries(regionCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
-
-        const cityCount = rawData.reduce((acc, item) => {
-          acc[item.city] = (acc[item.city] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
-        setTopCity(Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
-
-      } catch (err: any) {
-        console.error("Erro na requisição:", err);
-        setError(err.message || "Erro ao buscar dados");
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const rawData: ScanQrCode[] = await fetchScanData();
+      if (!rawData || !Array.isArray(rawData)) {
+        throw new Error("Dados inválidos retornados da API");
       }
-    };
 
-    getData();
+      setData(rawData);
+      setTotalScans(rawData.length);
+
+      const codeCount = rawData.reduce((acc, item) => {
+        acc[item.id_qrcode] = (acc[item.id_qrcode] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      setMostScannedCode(Object.entries(codeCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Nenhum");
+
+      const regionCount = rawData.reduce((acc, item) => {
+        acc[item.region] = (acc[item.region] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      setTopRegion(Object.entries(regionCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
+
+      const cityCount = rawData.reduce((acc, item) => {
+        acc[item.city] = (acc[item.city] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      setTopCity(Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
+
+    } catch (err: any) {
+      console.error("Erro na requisição:", err);
+      setError(err.message || "Erro ao buscar dados");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const filteredData = useMemo(() => {
     return data.filter((entry) =>
-      [entry.city, entry.region, entry.ip, entry.name]
+      [entry.city, entry.region, entry.ip, entry.qrcode?.name]
         .some((value) =>
           String(value || "").toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -77,5 +76,7 @@ export function useScanData() {
     topCity,
     error,
     loading,
+    fetchData,
   };
 }
+

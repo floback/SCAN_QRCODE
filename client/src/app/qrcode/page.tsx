@@ -41,6 +41,7 @@ export default function QrcodePage() {
     totalScans,
     mostScannedCode,
     topCity,
+    fetchData: fetchScanData, // renomeando para clareza
   } = useScanData();
 
   return (
@@ -55,7 +56,7 @@ export default function QrcodePage() {
             numberFone={numberFone}
             setNumberFone={setNumberFone}
             createQrcode={createQrcode}
-            setGeneratedQrcode={setGeneratedQrcode}
+            generatedQrcode={setGeneratedQrcode}
             setModalVisible={setModalVisible}
           />
 
@@ -95,6 +96,13 @@ export default function QrcodePage() {
       
       {/* Cards de estatísticas */}
       <ScanTable data={data} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        await fetchScanData();
+      {/* <button 
+  onClick={fetchScanData}
+  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+>
+  Atualizar Scans
+</button> */}
 
     </div>
   );
