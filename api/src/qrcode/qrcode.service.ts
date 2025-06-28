@@ -15,54 +15,16 @@ export class QrcodeService {
     private readonly qrcodeRepository: Repository<QrcodeEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
- 
-  // async createQRCode(
-  //   id_user: string,
-  //   number_fone?: string,
-  //   link_add?: string,
-  //   name?: string,
-  // ): Promise<QrcodeEntity> {
-  //   const uniqueCode = uuidv4();
-  
-  //   let finalLink = link_add;
-  //   if (!finalLink && number_fone) {
-  //     finalLink = `https://wa.me/${number_fone}`;
-  //   }
-  
-  //   const backendBaseUrl = process.env.BASE_URL || 'https://3f44-2804-16a0-2000-3194-3854-bd3e-277a-ab38.ngrok-free.app';
-  //   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
-  //   console.log(qrRedirectLink)
-  //   const img = await QRCode.toDataURL(qrRedirectLink, {
-  //     errorCorrectionLevel: 'H', // Alta correção de erro (mais seguro)
-  //     type: 'image/png',
-  //     scale: 10, // ⬅️ Isso define a resolução (quanto maior, mais qualidade)
-  //     margin: 2,
-  //     width: 500, // ⬅️ Alternativa ou complemento ao scale (define o tamanho final)
-  //   });
- 
-  //   const qrcode = this.qrcodeRepository.create({
-  //     id_user,
-  //     code: uniqueCode,
-  //     img,
-  //     status: true,
-  //     link_add: link_add,
-  //     number_fone: number_fone,
-  //     name, 
-  //   });
-  //   console.log(qrcode)
-  //   return await this.qrcodeRepository.save(qrcode);
-  // }
-  
-  
+
   async createQRCode(
     id_user: string,
     number_fone?: string,
     link_add?: string,
     name?: string,
   ): Promise<QrcodeEntity> {
-    
+
     const uniqueCode = uuidv4();
     // number fone default
     const finalNumber = number_fone ?? '0000000000';
@@ -71,9 +33,9 @@ export class QrcodeService {
 
     const backendBaseUrl = process.env.BASE_URL || `https://3f44-2804-16a0-2000-3194-3854-bd3e-277a-ab38.ngrok-free.app`;
     const qrRedirecLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
-    
+
     //gerar o qrcode em img
-    const img = await QRCode.toDataURL(qrRedirecLink,{
+    const img = await QRCode.toDataURL(qrRedirecLink, {
       errorCorrectionLevel: 'h',
       type: 'image/png',
       scale: 10,
@@ -95,13 +57,13 @@ export class QrcodeService {
     return await this.qrcodeRepository.save(qrcode);
 
   }
-  
+
   // Método para encontrar um QRCode por ID
   async findById(id: string): Promise<QrcodeEntity | null> {
     return await this.qrcodeRepository.findOne({ where: { id } });
   }
 
-    // qrcode.service.ts
+  // qrcode.service.ts
   async findAll(): Promise<QrcodeEntity[]> {
     return await this.qrcodeRepository.find();
   }
@@ -147,6 +109,6 @@ export class QrcodeService {
     const updatedQrcode = Object.assign(qrcode, createQrcodeDto);
     console.log('ID recebido para update:', id);
     console.log('Body recebido:', createQrcodeDto);
-    return  this.qrcodeRepository.save(qrcode);
+    return this.qrcodeRepository.save(qrcode);
   }
 }
