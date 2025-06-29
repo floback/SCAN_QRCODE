@@ -4,6 +4,7 @@
         "New Inputs app",
         "Qrcode",
         "ScanTable",
-        "Components/QrcodeForm"
+        "Components/QrcodeForm",
+        "ApiScan"
     ]
 }

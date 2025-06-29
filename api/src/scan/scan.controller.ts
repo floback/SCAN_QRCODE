@@ -25,11 +25,75 @@ export class ScanController {
 
     console.log('🔎 IP do scanner:', ipString, ' Geo:', geo);
 
-    const qr = await this.scanService.findByCode(qrId);
-    if (!qr) {
-      console.warn(`[ScanController] QR code "${qrId}" não encontrado.`);
-      return res.status(404).send('QR Code não encontrado!');
-    }
+   const qr = await this.scanService.findByCode(qrId);
+
+if (!qr) {
+  // QR Code não existe
+  return res.status(404).send(`
+    <html>
+      <head><title>QR Code inválido</title></head>
+      <body style="background:#fef2f2;font-family:sans-serif;text-align:center;padding-top:50px;color:#b91c1c">
+        <h1>🚫 QR Code inválido</h1>
+        <p>O QR Code escaneado não existe ou foi removido.</p>
+      </body>
+    </html>
+  `);
+}
+console.log(qr.status);
+
+if (qr.status === false) { 
+  return res.status(403).send(`
+    <html>
+      <head><title>QR Code Desativado</title></head>
+      <body style="background:#fef2f2;font-family:sans-serif;text-align:center;padding-top:50px;color:#b91c1c">
+        <h1>🚫 QR Code desativado</h1>
+        <p>Este QR Code foi desativado e não está mais disponível.</p>
+      </body>
+    </html>
+  `);
+}
+
+
+if (!qr.status) {
+  return res.send(`
+    <html>
+      <head>
+        <title>QR Code Desativado</title>
+        <style>
+          body {
+            background: #cffafe;
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 60px;
+            color: #0e7490;
+          }
+          .card {
+            background: white;
+            display: inline-block;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            max-width: 400px;
+          }
+          h1 {
+            font-size: 24px;
+            margin-bottom: 12px;
+          }
+          p {
+            font-size: 16px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>QR Code fora de uso</h1>
+          <p>Este QR Code foi desativado e não está mais disponível.</p>
+        </div>
+      </body>
+    </html>
+  `);
+}
+
 
     const latitude = geo?.ll?.[0] ?? null;
     const longitude = geo?.ll?.[1] ?? null;
