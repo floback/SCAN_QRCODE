@@ -100,7 +100,24 @@ if (!qr.status) {
 
     const scanData = { id_qrcode: qr.id, ip: ipString, country: geo?.country || 'Desconhecido', city: geo?.city || 'Desconhecida', region: geo?.region || 'Desconhecida', latitude, longitude };
 
-    const redirectTo = qr.number_fone ? `https://wa.me/${qr.number_fone}` : qr.link_add;
+    let redirectTo = qr.link_add;
+
+if (!redirectTo) {
+  switch (qr.app_type) {
+    case 'whatsapp':
+      redirectTo = `https://wa.me/${qr.number_fone}`;
+      break;
+    case 'telegram':
+      redirectTo = `https://t.me/${qr.number_fone}`;
+      break;
+    case 'signal':
+      redirectTo = `https://signal.me/#p/${qr.number_fone}`;
+      break;
+    default:
+      redirectTo = '/';
+  }
+}
+
 
 return res.send(`
   <!DOCTYPE html>

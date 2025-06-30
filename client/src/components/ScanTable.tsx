@@ -40,13 +40,13 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
         <table className="min-w-full text-sm text-center text-gray-600">
           <thead className="bg-gray-100 text-xs uppercase text-gray-500 sticky top-0">
             <tr>
+              <th className="px-2 py-2">CODE NAME</th>
               <th className="px-2 py-2">IP</th>
               <th className="px-2 py-2">COUNTRY</th>
               <th className="px-2 py-2">CITY</th>
               <th className="px-2 py-2">REGION</th>
-              <th className="px-2 py-2">CODE NAME</th>
               <th className="px-2 py-2">LINK ADD</th>
-              <th className="px-2 py-2">STATUS</th>
+              {/* <th className="px-2 py-2">STATUS</th> */}
               <th className="px-2 py-2">DATE AND TIME</th>
             </tr>
           </thead>
@@ -56,11 +56,11 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
                 key={entry.id}
                 className="border-b border-gray-200 odd:bg-white even:bg-gray-50 hover:bg-cyan-100 transition-colors duration-200"
               >
+                <td className="px-2 py-2 text-xs">{entry.qrcode?.name ?? "N/A"}</td>
                 <td className="px-2 py-2 text-xs">{entry.ip ?? "N/A"}</td>
                 <td className="px-2 py-2 text-xs">{entry.country ?? "N/A"}</td>
                 <td className="px-2 py-2 text-xs">{entry.city ?? "N/A"}</td>
                 <td className="px-2 py-2 text-xs">{entry.region ?? "N/A"}</td>
-                <td className="px-2 py-2 text-xs">{entry.qrcode?.name ?? "N/A"}</td>
                 <td className="px-2 py-2 text-blue-600 underline text-xs max-w-xs truncate">
                   <a
                     href={entry.qrcode?.link_add ?? "#"}
@@ -71,13 +71,13 @@ export default function ScanTable({ data, searchTerm, setSearchTerm }: ScanTable
                     {entry.qrcode?.link_add ?? "N/A"}
                   </a>
                 </td>
-               <td className="px-2 py-2 text-center-1">
+               {/* <td className="px-2 py-2 text-center-1">
                   <span
                     className={`inline-block w-3 h-3 rounded-full mx-auto ${
                       entry.qrcode?.status ? "bg-green-500" : "bg-gray-400"
                     }`}
                   ></span>
-                </td>
+                </td> */}
                 <td className="px-2 py-2 text-xs">
                   {entry.create_date
                     ? new Date(entry.create_date).toLocaleString()

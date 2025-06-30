@@ -22,8 +22,8 @@ export class QrcodeController {
     @Body() createQrcodeDto: CreateQrcodeDto,
   ): Promise<QrcodeEntity> {
     const id_user = req.user.sub;
-    const { number_fone, link_add, name } = createQrcodeDto;
-    return this.qrcodeService.createQRCode(id_user, number_fone, link_add, name);
+    const { number_fone, link_add, name, app_type } = createQrcodeDto;
+    return this.qrcodeService.createQRCode(id_user, number_fone, link_add, name, app_type);
   }
 
 

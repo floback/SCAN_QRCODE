@@ -39,10 +39,16 @@ export class CreateQrcodeTable1713300000002 implements MigrationInterface {
           name: 'number_fone',
           type: 'varchar',
           length: '20',
-        },        
+        },
+        {
+          name: 'app_type',
+          type: 'enum',
+          enum: ['whatsapp', 'telegram', 'signal'],
+          default: `'whatsapp'`,
+        },
         {
           name: 'status',
-          type: 'boolean'
+          type: 'boolean',
         },
         {
           name: 'creation_date',
@@ -53,12 +59,11 @@ export class CreateQrcodeTable1713300000002 implements MigrationInterface {
           name: 'update_at',
           type: 'timestamp',
           default: 'CURRENT_TIMESTAMP',
-
-        }
+        },
       ],
     }));
 
-    // Criando a chave estrangeira para o campo id_user, associando ao id da tabela users
+    // Chave estrangeira
     await queryRunner.createForeignKey('qrcode', new TableForeignKey({
       columnNames: ['id_user'],
       referencedColumnNames: ['id'],
