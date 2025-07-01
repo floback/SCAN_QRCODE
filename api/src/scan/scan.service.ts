@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { ScanEntity } from './entities/scan.entity';
 import { QrcodeEntity } from 'src/qrcode/entities/qrcode.entity';
 import { ScanDto } from './dto/create-scan.dto';
+import { ScanGateway } from './scan.gateway';
 
 @Injectable()
 export class ScanService {
@@ -13,14 +14,13 @@ export class ScanService {
     private readonly scanRepository: Repository<ScanEntity>,
     @InjectRepository(QrcodeEntity)
     private readonly qrcodeRepository: Repository<QrcodeEntity>,
+    private scanGateway: ScanGateway,
   ) {}
 
   async createScan(dto: ScanDto): Promise<ScanEntity> {
   const scan = new ScanEntity();
 
-  // associar entidade qrcode com apenas o id
   scan.qrcode = { id: dto.id_qrcode } as QrcodeEntity;
-
   scan.ip = dto.ip;
   scan.country = dto.country;
   scan.city = dto.city;
@@ -28,8 +28,21 @@ export class ScanService {
   scan.latitude = dto.latitude;
   scan.longitude = dto.longitude;
 
-  return await this.scanRepository.save(scan);
+  const saved = await this.scanRepository.save(scan);
+
+  // 🧠 Aqui buscamos o scan novamente, agora com a relação qrcode carregada
+  const savedWithQrcode = await this.scanRepository.findOne({
+    where: { id: saved.id },
+    relations: ['qrcode'],
+  });
+
+  if (savedWithQrcode) {
+    this.scanGateway.emitNewScan(savedWithQrcode);
+  }
+
+  return saved;
 }
+
 
   async findByCode(code: string) {
     return this.qrcodeRepository.findOne({ where: { code } });

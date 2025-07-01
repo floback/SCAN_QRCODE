@@ -3,6 +3,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { ScanQrCode } from "@/app/qrcode/types/types";
 import { fetchScanData } from "@/app/qrcode/service/service.scan";
+import { io } from "socket.io-client";
+
 
 // useScan.ts
 export function useScanData() {
@@ -53,9 +55,31 @@ export function useScanData() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+ useEffect(() => {
+  fetchData();
+
+  const socket = io(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000", {
+    transports: ["websocket"],
+  });
+
+  socket.on("connect", () => {
+    console.log("🔌 Conectado ao WebSocket");
+  });
+
+  socket.on("new-scan", (newScan: ScanQrCode) => {
+    console.log("📥 Novo scan recebido:", newScan);
+    setData((prev) => [newScan, ...prev]);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("🔌 Desconectado do WebSocket");
+  });
+
+  return () => {
+    socket.disconnect();
+  };
+}, []);
+
 
   const filteredData = useMemo(() => {
     return data.filter((entry) =>
