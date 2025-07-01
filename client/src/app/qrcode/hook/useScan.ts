@@ -5,7 +5,6 @@ import { ScanQrCode } from "@/app/qrcode/types/types";
 import { fetchScanData } from "@/app/qrcode/service/service.scan";
 import { io } from "socket.io-client";
 
-
 // useScan.ts
 export function useScanData() {
   const [data, setData] = useState<ScanQrCode[]>([]);
@@ -21,32 +20,10 @@ export function useScanData() {
     setLoading(true);
     setError(null);
     try {
-      const rawData: ScanQrCode[] = await fetchScanData();
-      if (!rawData || !Array.isArray(rawData)) {
-        throw new Error("Dados inválidos retornados da API");
+      const rawData = await fetchScanData();
+      if (rawData) {
+        setData(rawData);
       }
-
-      setData(rawData);
-      setTotalScans(rawData.length);
-
-      const codeCount = rawData.reduce((acc, item) => {
-        acc[item.id_qrcode] = (acc[item.id_qrcode] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-      setMostScannedCode(Object.entries(codeCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Nenhum");
-
-      const regionCount = rawData.reduce((acc, item) => {
-        acc[item.region] = (acc[item.region] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-      setTopRegion(Object.entries(regionCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
-
-      const cityCount = rawData.reduce((acc, item) => {
-        acc[item.city] = (acc[item.city] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-      setTopCity(Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
-
     } catch (err: any) {
       console.error("Erro na requisição:", err);
       setError(err.message || "Erro ao buscar dados");
@@ -55,31 +32,55 @@ export function useScanData() {
     }
   };
 
- useEffect(() => {
-  fetchData();
+  // Atualiza estatísticas sempre que os dados mudarem
+  useEffect(() => {
+    setTotalScans(data.length);
 
-  const socket = io(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000", {
-    transports: ["websocket"],
-  });
+    const codeCount = data.reduce((acc, item) => {
+      acc[item.id_qrcode] = (acc[item.id_qrcode] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    setMostScannedCode(Object.entries(codeCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Nenhum");
 
-  socket.on("connect", () => {
-    console.log("🔌 Conectado ao WebSocket");
-  });
+    const regionCount = data.reduce((acc, item) => {
+      acc[item.region] = (acc[item.region] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    setTopRegion(Object.entries(regionCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
 
-  socket.on("new-scan", (newScan: ScanQrCode) => {
-    console.log("📥 Novo scan recebido:", newScan);
-    setData((prev) => [newScan, ...prev]);
-  });
+    const cityCount = data.reduce((acc, item) => {
+      acc[item.city] = (acc[item.city] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    setTopCity(Object.entries(cityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || "Desconhecida");
 
-  socket.on("disconnect", () => {
-    console.log("🔌 Desconectado do WebSocket");
-  });
+  }, [data]); // <-- escuta qualquer mudança nos dados
 
-  return () => {
-    socket.disconnect();
-  };
-}, []);
+  // Inicializa fetch + WebSocket
+  useEffect(() => {
+    fetchData();
 
+    const socket = io(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000", {
+      transports: ["websocket"],
+    });
+
+    socket.on("connect", () => {
+      console.log("🔌 Conectado ao WebSocket");
+    });
+
+    socket.on("new-scan", (newScan: ScanQrCode) => {
+      console.log("📥 Novo scan recebido:", newScan);
+      setData((prev) => [newScan, ...prev]);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("🔌 Desconectado do WebSocket");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const filteredData = useMemo(() => {
     return data.filter((entry) =>
@@ -103,4 +104,3 @@ export function useScanData() {
     fetchData,
   };
 }
-

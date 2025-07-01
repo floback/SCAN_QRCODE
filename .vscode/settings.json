@@ -5,6 +5,7 @@
         "Qrcode",
         "ScanTable",
         "Components/QrcodeForm",
-        "ApiScan"
+        "ApiScan",
+        "Cards"
     ]
 }
