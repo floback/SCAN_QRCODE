@@ -39,9 +39,10 @@ export default function QrcodePage() {
     searchTerm,
     setSearchTerm,
     totalScans,
-    mostScannedCode,
+     mostScannedCode,
+    mostScannedCodeName,
     topCity,
-    fetchData: fetchScanData, // renomeando para clareza
+    fetchData: fetchScanData, 
   } = useScanData();
 
   return (
@@ -87,22 +88,18 @@ export default function QrcodePage() {
         <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
         <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />
         <InfoCard
-          title="CODE PLUS SCANNING"
-          value={mostScannedCode || "-"}
-          icon={Trophy}
+        title="CODE PLUS SCANNING"
+        value={mostScannedCodeName || "-"}
+        icon={Trophy}
         />
+
+
         <InfoCard title="SCANNING CITY" value={topCity || "-"} icon={MapPin} />
       </div>
       
       {/* Cards de estatísticas */}
-      <ScanTable data={data} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        await fetchScanData();
-      {/* <button 
-  onClick={fetchScanData}
-  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
->
-  Atualizar Scans
-</button> */}
+     <ScanTable data={data} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
 
     </div>
   );

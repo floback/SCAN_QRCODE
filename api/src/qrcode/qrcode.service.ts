@@ -47,7 +47,7 @@ if (!finalLink) {
 }
 
 
-  const backendBaseUrl = process.env.BASE_URL || 'https://f92f-2804-16a0-2000-313b-5499-f604-69ab-ad33.ngrok-free.app';
+  const backendBaseUrl = process.env.BASE_URL || 'https://a499-2804-16a0-2000-313b-80e5-8476-de08-3d19.ngrok-free.app';
   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
 
   const img = await QRCode.toDataURL(qrRedirectLink, {
