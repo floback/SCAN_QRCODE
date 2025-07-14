@@ -1,4 +1,3 @@
-// src/app/qrcode/service/service.qrcode.ts
 "use client";
 
 import { QrCode } from "../types/types";

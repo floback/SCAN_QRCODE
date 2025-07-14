@@ -32,6 +32,9 @@ export class QrcodeService {
 let finalLink = link_add;
 if (!finalLink) {
   switch (app_type) {
+    case AppType.NONE:
+      finalLink = `https://none.com`
+      break;
     case AppType.WHATSAPP:
       finalLink = `https://wa.me/${finalNumber}`;
       break;
@@ -47,7 +50,7 @@ if (!finalLink) {
 }
 
 
-  const backendBaseUrl = process.env.BASE_URL || 'https://a499-2804-16a0-2000-313b-80e5-8476-de08-3d19.ngrok-free.app';
+  const backendBaseUrl = process.env.BASE_URL || 'https://5a0be10403b6.ngrok-free.app';
   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
 
   const img = await QRCode.toDataURL(qrRedirectLink, {

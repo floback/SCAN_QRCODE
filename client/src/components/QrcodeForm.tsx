@@ -80,6 +80,7 @@ const handleSubmit = async () => {
             onChange={(e) => setAppType(e.target.value)}
             className="w-full border rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring focus:border-cyan-500"
           >
+            <option value="none">NONE</option>
             <option value="whatsapp">WhatsApp</option>
             <option value="telegram">Telegram</option>
             <option value="signal">Signal</option>
