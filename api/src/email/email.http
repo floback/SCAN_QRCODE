@@ -1,9 +1,9 @@
 ### Enviar e-mail de recuperação de senha
-POST http://localhost:3000/email/recovery-password
+POST http://localhost:3001/email/recovery-password
 Content-Type: application/json
 
 {
-  "email": "filipe.siqueira@novanet-rj.com.br"
+  "email": "filipelobacksiqueira01@gmail.com"
 }
 
 ### NOVA SENHA

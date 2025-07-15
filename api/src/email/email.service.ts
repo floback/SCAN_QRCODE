@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/entities/user.entity';
@@ -15,9 +19,12 @@ export class EmailService {
     private readonly usersRepository: Repository<UserEntity>,
 
     private readonly mailerService: MailerService,
-  ) { }
+  ) {}
 
-  async sendRecoveryEmail(email: string): Promise<string> {
+  /**
+   * Envia e-mail com link para redefinição de senha.
+   */
+  async sendRecoveryEmail(email: string): Promise<{ message: string }> {
     const user = await this.usersRepository.findOne({ where: { email } });
 
     if (!user) {
@@ -32,7 +39,6 @@ export class EmailService {
 
     const resetLink = `${process.env.CLIENT_URL}/email/reset?token=${token}`;
 
-
     await this.mailerService.sendMail({
       to: email,
       subject: 'Recuperação de Senha',
@@ -43,10 +49,16 @@ export class EmailService {
       `,
     });
 
-    return 'E-mail de recuperação enviado com sucesso';
+    return { message: 'E-mail de recuperação enviado com sucesso' };
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+  /**
+   * Redefine a senha do usuário a partir do token enviado por e-mail.
+   */
+  async resetPassword(
+    token: string,
+    newPassword: string,
+  ): Promise<{ message: string }> {
     try {
       const payload: any = this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET,
@@ -54,15 +66,17 @@ export class EmailService {
 
       const id_user = payload.id_user;
 
-      const user = await this.usersRepository.findOne({ where: { id: id_user } });
+      const user = await this.usersRepository.findOne({
+        where: { id: id_user },
+      });
 
       if (!user) {
         throw new NotFoundException('Usuário não encontrado.');
       }
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-
       user.password = hashedPassword;
+
       await this.usersRepository.save(user);
 
       return { message: 'Senha redefinida com sucesso.' };

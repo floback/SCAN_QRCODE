@@ -1,31 +1,11 @@
 "use client";
-import { useState } from "react";
+
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { useRecovery } from "./hook/useRecovery";
 
 export default function RecoveryPage() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("API_URL:", process.env.NEXT_PUBLIC_API_URL);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/email/recovery-password`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      }
-    );
-
-    if (res.ok) {
-      setMessage("Email de recuperação enviado!");
-    } else {
-      const { message } = await res.json();
-      setMessage(`Erro: ${message}`);
-    }
-  };
+  const { email, setEmail, message, handleSubmit, loading } = useRecovery();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-300 font-sans">
@@ -45,8 +25,10 @@ export default function RecoveryPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          
-          <Button typeStyle="primary">Enviar</Button>
+
+          <Button typeStyle="primary" disabled={loading}>
+            {loading ? "Enviando..." : "Enviar"}
+          </Button>
         </form>
         {message && (
           <p className="mt-4 text-center text-sm text-zinc-600">{message}</p>
