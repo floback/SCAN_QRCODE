@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional, IsEnum, IsUUID } 
  export enum  UserType  {
   owner = 'OWNER',
   admin = 'ADMIN',
-  user = 'user',
+  user = 'USER',
   viwer = 'VIWER'
 }
 export class CreateUserDto {
