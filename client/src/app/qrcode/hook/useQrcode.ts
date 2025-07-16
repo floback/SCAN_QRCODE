@@ -7,7 +7,7 @@ import {
   createQrcode as createQrcodeApi,
   deleteQrcode as deleteQrcodeApi,
   updateQrcode as updateQrcodeApi,
-} from "../service/service.qrcode";
+} from "../service/qrcode.service";
 
 export function useQrcodeData() {
   const [dataQrcode, setData] = useState<QrCode[]>([]);

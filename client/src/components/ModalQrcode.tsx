@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { Label } from "@/components/Label";
-import { updateQrcode } from "@/app/qrcode/service/service.qrcode";
+import { updateQrcode } from "@/app/qrcode/service/qrcode.service";
 
 interface ModalQrcodeProps {
   isOpen: boolean;

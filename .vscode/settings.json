@@ -8,6 +8,7 @@
         "ApiScan",
         "Cards",
         "ApiEmail",
-        "ClientEmail"
+        "ClientEmail",
+        "ClientUserRegister"
     ]
 }

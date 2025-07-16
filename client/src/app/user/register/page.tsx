@@ -1,59 +1,26 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import Input from "@/components/Input";
 import Loader from "@/components/Loader";
-import { toast } from "react-toastify";
 import Button from "@/components/Button";
+import { useRegister } from "./hook/useResgister";
 
 export default function RegisterPage() {
-  const router = useRouter();
-
-  const [name, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [confirmEmail, setConfirmEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const nameRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    nameRef.current?.focus();
-  }, []);
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    if (email !== confirmEmail) {
-      toast.error("Os e-mails não coincidem.");
-      setIsLoading(false);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast.error("As senhas não coincidem.");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      await axios.post("http://localhost:3001/user/register", {
-        name,
-        email,
-        password,
-      });
-
-      toast.success("Conta criada com sucesso! Redirecionando...");
-      setTimeout(() => router.push("/auth"), 2000);
-    } catch (err) {
-      toast.error("Erro ao criar conta. Verifique os dados e tente novamente.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    name,
+    email,
+    confirmEmail,
+    password,
+    confirmPassword,
+    isLoading,
+    nameRef,
+    setFullName,
+    setEmail,
+    setConfirmEmail,
+    setPassword,
+    setConfirmPassword,
+    handleRegister,
+  } = useRegister();
 
   if (isLoading) return <Loader />;
 
@@ -67,79 +34,57 @@ export default function RegisterPage() {
           Criar Conta
         </h2>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Nome completo
-          </label>
-          <input
-            type="text"
-            ref={nameRef}
-            className="w-full border px-4 py-2 rounded text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            value={name}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Digite seu nome completo"
-            required
-          />
-        </div>
+        <Input
+          label="Nome completo"
+          name="name"
+          placeholder="Digite seu nome completo"
+          required
+          value={name}
+          onChange={(e) => setFullName(e.target.value)}
+          inputRef={nameRef}
+        />
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Email
-          </label>
-          <input
-            type="email"
-            className="w-full border px-4 py-2 rounded text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Digite seu email"
-            required
-          />
-        </div>
+        <Input
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="Digite seu email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Confirmar Email
-          </label>
-          <input
-            type="email"
-            className="w-full border px-4 py-2 rounded text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            value={confirmEmail}
-            onChange={(e) => setConfirmEmail(e.target.value)}
-            placeholder="Confirme seu email"
-            required
-          />
-        </div>
+        <Input
+          label="Confirmar Email"
+          type="email"
+          name="confirmEmail"
+          placeholder="Confirme seu email"
+          required
+          value={confirmEmail}
+          onChange={(e) => setConfirmEmail(e.target.value)}
+        />
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Senha
-          </label>
-          <input
-            type="password"
-            className="w-full border px-4 py-2 rounded text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Digite sua senha"
-            required
-          />
-        </div>
+        <Input
+          label="Senha"
+          type="password"
+          name="password"
+          placeholder="Digite sua senha"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-1.5 text-sm">
-            Confirmar Senha
-          </label>
-          <input
-            type="password"
-            className="w-full border px-4 py-2 rounded text-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirme sua senha"
-            required
-          />
-        </div>
+        <Input
+          label="Confirmar Senha"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirme sua senha"
+          required
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
 
-      
-           <Button typeStyle="primary">Salvar</Button>
+        <Button typeStyle="primary">Salvar</Button>
 
         <div className="mt-5 text-center">
           <a

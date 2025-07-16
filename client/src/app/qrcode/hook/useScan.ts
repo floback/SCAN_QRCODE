@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { ScanQrCode } from "@/app/qrcode/types/types";
-import { fetchScanData } from "@/app/qrcode/service/service.scan";
+import { fetchScanData } from "@/app/qrcode/service/scan.service";
 import { io } from "socket.io-client";
 
 export function useScanData() {
