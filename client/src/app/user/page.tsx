@@ -19,7 +19,6 @@ import {
   Users,
 } from "lucide-react";
 
-// 👇 Enum adicionado
 enum UserType {
   ADMIN = "ADMIN",
   USER = "USER",
@@ -41,9 +40,9 @@ export default function UserManagementPage() {
 
   const totalAdmins = users.filter((user) => user.type_user.toLowerCase() === "admin").length;
   const totalNormalUsers = users.filter((user) => user.type_user.toLowerCase() === "user").length;
-
   const filteredUsers = users.filter((user) => {
-    const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase());
+  const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase());
+  
     const matchesStatus =
       statusFilter === "all" ||
       (statusFilter === "active" && user.status) ||

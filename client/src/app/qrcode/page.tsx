@@ -85,16 +85,29 @@ export default function QrcodePage() {
 
       {/* Cards de estatísticas */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-        <InfoCard title="TOTAL QR CODE" value={totalCodes} icon={QrCodeIcon} />
-        <InfoCard title="TOTAL SCAN" value={totalScans} icon={ScanLine} />
-        <InfoCard
-        title="CODE PLUS SCANNING"
-        value={mostScannedCodeName || "-"}
-        icon={Trophy}
+      <InfoCard
+          title="TOTAL QR CODE"
+          value={totalCodes}
+          icon={QrCodeIcon}
+          bgColor="bg-blue-600" // Azul roxo: Representa tecnologia, estabilidade
+        />        
+      <InfoCard
+          title="TOTAL SCAN"
+          value={totalScans}
+          icon={ScanLine}
+          bgColor="bg-green-600" // Verde: Ação, sucesso, algo positivo (scans feitos)
+        />
+         <InfoCard
+          title="CODE PLUS SCANNING"
+          value={mostScannedCodeName || "-"}
+          icon={Trophy}
+          bgColor="bg-yellow-500" // Amarelo: Destaque, premiação
         />
 
-
-        <InfoCard title="SCANNING CITY" value={topCity || "-"} icon={MapPin} />
+        <InfoCard title="SCANNING CITY"
+        value={topCity || "-"}
+        icon={MapPin}
+        bgColor="bg-green-700" />
       </div>
       
       {/* Cards de estatísticas */}
