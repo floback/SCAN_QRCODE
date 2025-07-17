@@ -47,8 +47,8 @@ export class UserService {
     const user = this.userRepository.create({
       ...createUserDto,
       password: hashedPassword,
-      status: true, // desativado por padrão
-      type_user: UserType.user, // use o enum corretamente
+      status: true, 
+      type_user: UserType.user, 
     });
 
     return await this.userRepository.save(user);

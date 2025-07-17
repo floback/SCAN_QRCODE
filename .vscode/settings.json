@@ -9,6 +9,7 @@
         "Cards",
         "ApiEmail",
         "ClientEmail",
-        "ClientUserRegister"
+        "ClientUserRegister",
+        "ClientUser"
     ]
 }

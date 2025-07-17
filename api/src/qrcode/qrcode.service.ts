@@ -50,7 +50,7 @@ if (!finalLink) {
 }
 
 
-  const backendBaseUrl = process.env.BASE_URL || 'https://c9fd9b768da9.ngrok-free.app';
+  const backendBaseUrl = process.env.BASE_URL || 'https://661612b4994f.ngrok-free.app';
   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
 
   const img = await QRCode.toDataURL(qrRedirectLink, {
