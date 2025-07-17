@@ -6,7 +6,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { Label } from "@/components/Label";
 import InfoCard from "@/components/Card";
-import { User, UserType } from "./types/types";
+import { User } from "./types/types";
 import {
   Search,
   Pencil,
@@ -18,6 +18,12 @@ import {
   Info,
   Users,
 } from "lucide-react";
+
+// 👇 Enum adicionado
+enum UserType {
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
 
 export default function UserManagementPage() {
   const {
@@ -33,6 +39,9 @@ export default function UserManagementPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
 
+  const totalAdmins = users.filter((user) => user.type_user.toLowerCase() === "admin").length;
+  const totalNormalUsers = users.filter((user) => user.type_user.toLowerCase() === "user").length;
+
   const filteredUsers = users.filter((user) => {
     const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase());
     const matchesStatus =
@@ -45,32 +54,25 @@ export default function UserManagementPage() {
   return (
     <div className="min-h-screen bg-cyan-100 px-8 py-10 font-sans text-base">
       <div className="bg-white rounded-3xl p-8 shadow-lg max-w-7xl mx-auto">
-        {/* Header */}
         <h1 className="text-3xl font-bold text-gray-800 mb-6">CONTROL USERS</h1>
 
-        {/* Cards + Filtros */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-8">
-          {/* Cards de Estatísticas */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto">
-            <InfoCard
-              title="Total de Usuários"
-              value={users.length}
-              icon={Users}
-            />
-            {/* Adicione mais InfoCards se desejar */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            <InfoCard title="Total de Usuários" value={users.length} icon={Users} bgColor="bg-indigo-600" />
+            <InfoCard title="Total de Admins" value={totalAdmins} icon={Users} bgColor="bg-emerald-500" />
+            <InfoCard title="Total de Users" value={totalNormalUsers} icon={Users} bgColor="bg-amber-500" />
           </div>
 
-          {/* Filtros e Botão */}
-            <div className="flex flex-wrap gap-4 items-center w-full lg:justify-end">
+          <div className="flex flex-wrap gap-3 justify-end items-center w-full">
             <div className="relative">
-                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-800" />
-                <input
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-800" />
+              <input
                 type="text"
-                placeholder="Search"
-                className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-md text-base shadow-md bg-white text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Buscar por nome"
+                className="pl-10 pr-4 py-2 border-2 border-gray-300 rounded-md text-base shadow-md bg-white text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                />
+              />
             </div>
 
             <select
@@ -84,8 +86,7 @@ export default function UserManagementPage() {
             </select>
 
             <Button size="md" typeStyle="secondary" fullWidth={false}>
-              <Plus  />
-              Add User
+              <Plus className="mr-1" /> Add User
             </Button>
           </div>
         </div>
@@ -107,55 +108,26 @@ export default function UserManagementPage() {
               {filteredUsers.map((user) => {
                 const isEditing = editingUserId === user.id;
                 return (
-                  <tr
-                    key={user.id}
-                    className="odd:bg-white even:bg-gray-50 hover:bg-cyan-50 border-b"
-                  >
+                  <tr key={user.id} className="odd:bg-white even:bg-gray-50 hover:bg-cyan-50 border-b">
                     {isEditing ? (
                       <>
                         <td className="px-4 py-3">
-                          <Input
-                            size="md"
-                            defaultValue={user.name}
-                            onChange={(e) =>
-                              setEditedUser({ ...editedUser, name: e.target.value })
-                            }
-                          />
+                          <Input defaultValue={user.name} onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })} />
                         </td>
                         <td className="px-4 py-3">
-                          <Input
-                            size="md"
-                            defaultValue={user.email}
-                            onChange={(e) =>
-                              setEditedUser({ ...editedUser, email: e.target.value })
-                            }
-                          />
+                          <Input defaultValue={user.email} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} />
                         </td>
                         <td className="px-4 py-3">
-                          <Input
-                            size="md"
-                            placeholder="••••••••"
-                            showTogglePassword
-                            onChange={(e) =>
-                              setEditedUser({ ...editedUser, password: e.target.value })
-                            }
-                          />
+                          <Input placeholder="••••••••" showTogglePassword onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} />
                         </td>
                         <td className="px-4 py-3">
                           <select
-                            className="w-full border rounded px-3 py-2 text-base"
                             defaultValue={user.type_user}
-                            onChange={(e) =>
-                              setEditedUser({
-                                ...editedUser,
-                                type_user: e.target.value as UserType,
-                              })
-                            }
+                            onChange={(e) => setEditedUser({ ...editedUser, type_user: e.target.value as UserType })}
+                            className="w-full border rounded px-3 py-2 text-base"
                           >
                             {Object.values(UserType).map((type) => (
-                              <option key={type} value={type}>
-                                {type}
-                              </option>
+                              <option key={type} value={type}>{type}</option>
                             ))}
                           </select>
                         </td>
@@ -165,28 +137,14 @@ export default function UserManagementPage() {
                               type="checkbox"
                               className="sr-only peer"
                               checked={editedUser.status ?? user.status}
-                              onChange={(e) =>
-                                setEditedUser({
-                                  ...editedUser,
-                                  status: e.target.checked,
-                                })
-                              }
+                              onChange={(e) => setEditedUser({ ...editedUser, status: e.target.checked })}
                             />
                             <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 transition" />
                             <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-full" />
                           </label>
                         </td>
                         <td className="px-4 py-3 flex justify-center gap-2">
-                          <Button
-                            typeStyle="primary"
-                            size="md"
-                            fullWidth={false}
-                            onClick={() =>
-                              handleSaveEdit(user.id, editedUser).then(() =>
-                                setEditedUser({})
-                              )
-                            }
-                          >
+                          <Button typeStyle="primary" size="md" fullWidth={false} onClick={() => handleSaveEdit(user.id, editedUser).then(() => setEditedUser({}))}>
                             <Check size={20} />
                           </Button>
                         </td>
@@ -198,33 +156,15 @@ export default function UserManagementPage() {
                         <td className="px-4 py-3">••••••••</td>
                         <td className="px-4 py-3">{user.type_user}</td>
                         <td className="px-4 py-3">
-                          <button
-                            title={user.status ? "Deactivate" : "Activate"}
-                            onClick={() => handleToggleStatus(user.id, user.status)}
-                          >
-                            {user.status ? (
-                              <Circle className="text-green-500" size={20} />
-                            ) : (
-                              <CircleDot className="text-red-500" size={20} />
-                            )}
+                          <button onClick={() => handleToggleStatus(user.id, user.status)}>
+                            {user.status ? <Circle className="text-green-500" size={20} /> : <CircleDot className="text-red-500" size={20} />}
                           </button>
                         </td>
                         <td className="px-4 py-3 flex justify-center gap-3">
-                          <button
-                            className="text-cyan-600 hover:text-cyan-800"
-                            title="Edit"
-                            onClick={() => {
-                              handleEdit(user.id);
-                              setEditedUser(user);
-                            }}
-                          >
+                          <button className="text-cyan-600 hover:text-cyan-800" onClick={() => { handleEdit(user.id); setEditedUser(user); }}>
                             <Pencil size={20} />
                           </button>
-                          <button
-                            className="text-red-600 hover:text-red-800"
-                            title="Delete"
-                            onClick={() => handleDelete(user.id)}
-                          >
+                          <button className="text-red-600 hover:text-red-800" onClick={() => handleDelete(user.id)}>
                             <Trash size={20} />
                           </button>
                         </td>
