@@ -35,8 +35,8 @@ export function useUserManagement() {
 
   const handleToggleStatus = async (id: string, currentStatus: boolean) => {
   try {
-    await updateUser(id, { status: !currentStatus }); // alterna o status
-    await fetchUsers(); // recarrega os dados
+    await updateUser(id, { status: !currentStatus });
+    await fetchUsers();
   } catch (error) {
     console.error("Erro ao alterar status:", error);
   }
@@ -54,6 +54,7 @@ export function useUserManagement() {
     setEditingUserId(null);
   };
 
+ 
   return {
     users,
     editingUserId,

@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import { Label } from "@/components/Label";
 import InfoCard from "@/components/Card";
 import { User } from "./types/types";
+import { ModalUser } from "@/components/Modaluser";
 import {
   Search,
   Pencil,
@@ -32,17 +33,19 @@ export default function UserManagementPage() {
     handleToggleStatus,
     handleEdit,
     handleSaveEdit,
+    handleCreateUser, // ✅ Certifique-se de que está implementado no hook
   } = useUserManagement();
 
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // ✅ MOVIDO para o escopo correto
 
   const totalAdmins = users.filter((user) => user.type_user.toLowerCase() === "admin").length;
   const totalNormalUsers = users.filter((user) => user.type_user.toLowerCase() === "user").length;
+
   const filteredUsers = users.filter((user) => {
-  const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase());
-  
+    const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase());
     const matchesStatus =
       statusFilter === "all" ||
       (statusFilter === "active" && user.status) ||
@@ -84,7 +87,21 @@ export default function UserManagementPage() {
               <option value="inactive">Inactive</option>
             </select>
 
-            <Button size="md" typeStyle="secondary" fullWidth={false}>
+            <ModalUser
+              isOpen={isCreateModalOpen}
+              onClose={() => setIsCreateModalOpen(false)}
+              onSave={async (data) => {
+                await handleCreateUser(data);
+                setIsCreateModalOpen(false);
+              }}
+            />
+
+            <Button
+              size="md"
+              typeStyle="secondary"
+              fullWidth={false}
+              onClick={() => setIsCreateModalOpen(true)}
+            >
               <Plus className="mr-1" /> Add User
             </Button>
           </div>
