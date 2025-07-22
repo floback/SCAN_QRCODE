@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { User } from "../app/user/types/types";
-import Button from "./Button";
-import Input from "./Input";
+import { User } from "../../app/user/types/types";
+import Button from "../Button";
+import Input from "../Input";
 
 interface ModalUserProps {
   isOpen: boolean;
@@ -88,7 +88,7 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
           <Button typeStyle="secondary" onClick={onClose}>
             Cancelar
           </Button>
-          <Button typeStyle="primary" onClick={() => onSave(formData)}>
+          <Button typeStyle="secondary" onClick={() => onSave(formData)}>
             Salvar
           </Button>
         </div>

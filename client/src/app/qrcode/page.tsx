@@ -5,7 +5,7 @@ import QrcodeForm from "@/components/QrcodeForm";
 import QrcodeTable from "@/components/QrcodeTable";
 import { useScanData } from "./hook/useScan";
 import { useQrcodeData } from "./hook/useQrcode";
-import ModalQrcode from "@/components/ModalQrcode";
+import ModalQrcode from "@/components/modal/ModalQrcode";
 import { useState } from "react";
 import { QrCode } from "@/app/qrcode/types/types";
 import InfoCard from "@/components/Card";

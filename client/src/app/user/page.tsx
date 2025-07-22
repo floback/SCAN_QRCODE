@@ -7,7 +7,7 @@ import Button from "@/components/Button";
 import { Label } from "@/components/Label";
 import InfoCard from "@/components/Card";
 import { User } from "./types/types";
-import { ModalUser } from "@/components/Modaluser";
+import { ModalUser } from "@/components/modal/Modaluser";
 import {
   Search,
   Pencil,
