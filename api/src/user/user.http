@@ -20,15 +20,16 @@ GET  http://localhost:3001/user
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyY2MwYjBhNC1mZjY0LTQ0NGItYmUzZS01ODQ5MjQ3MTBmMjciLCJlbWFpbCI6ImZpbGlwZWxvYmFja3NpcXVlaXJhMDFAZ21haWwuY29tIiwidHlwZV91c2VyIjoidXNlciIsInBhc3N3b3JkIjoiJDJiJDEwJGZpSXIxS0lHcnNGemR3M05DbGpKLi5QRlBSb2N5Vzdpclk0NUpsL3pXR25DRHBuNURxOVdpIiwiaWF0IjoxNzUyNzAxNzk3LCJleHAiOjE3NTI3ODgxOTd9.lZnH5xzfQ0JSlcd2-BAKRpoT6K1goz_NWpzCwPz2czw
 
 ### UPDATE USER
-PATCH http://localhost:3001/user/8a28c872-7fd9-4a14-b097-9ae700a4afe2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyY2MwYjBhNC1mZjY0LTQ0NGItYmUzZS01ODQ5MjQ3MTBmMjciLCJlbWFpbCI6ImZpbGlwZWxvYmFja3NpcXVlaXJhMDFAZ21haWwuY29tIiwidHlwZV91c2VyIjoidXNlciIsInBhc3N3b3JkIjoiJDJiJDEwJGZpSXIxS0lHcnNGemR3M05DbGpKLi5QRlBSb2N5Vzdpclk0NUpsL3pXR25DRHBuNURxOVdpIiwiaWF0IjoxNzUyNzAxNDA0LCJleHAiOjE3NTI3ODc4MDR9.Ea9OwKI99BLH12IBIluZhswDmt_ZPth5aKXVhXMtr40
+PATCH http://localhost:3001/user/2cc0b0a4-ff64-444b-be3e-584924710f27
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyY2MwYjBhNC1mZjY0LTQ0NGItYmUzZS01ODQ5MjQ3MTBmMjciLCJlbWFpbCI6ImZpbGlwZWxvYmFja3NpcXVlaXJhMDFAZ21haWwuY29tIiwidHlwZV91c2VyIjoib3duZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRrSktoTUQ4VS5VeUhFRmxDdHg5bHF1TmZmTlo2QWx0OS91dHZkYmw5R0hFWmNjT09mMXpqaSIsImlhdCI6MTc1MzM2Nzc1NCwiZXhwIjoxNzUzNDU0MTU0fQ.yDqr2Vd6PeTvU23YKkYXBEmSiYcJmFkS2C_LDxu7mwY
 
 {
-  "email": "filipe.siqueira@novanet-rj.com.br",
-  "name": "filipe siqueira",
-  "password": "senha1234",
+  "email": "filipelobacksiqueira01@gmail.com",
+  "name": "floback",
+  "password": "123456",
   "status": true,
-  "type_user": "owner"
+  "type_user": "OWNER"
 }
 
 ### DELETE USER

@@ -1,5 +1,6 @@
 import { All, BadRequestException, ConflictException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto, UserType } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/create-update-user.dto'
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
@@ -72,26 +73,31 @@ export class UserService {
 
   //UPDATE USER
   async updateUser(
-    id: string,
-    createUserDto: Partial<CreateUserDto>,
-  ): Promise<UserEntity> {
-    const user = await this.findById(id);
-
-    if (createUserDto.password) {
-      createUserDto.password = await bcrypt.hash(createUserDto.password, 10)
-    }
-
-    if (createUserDto.email && createUserDto.email !== user.email) {
-      const existing = await this.userRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-      if (existing) {
-        throw new ConflictException(`This is e-mail ${createUserDto.email} existing`);
-      }
-    }
-    const updated = Object.assign(user, createUserDto);
-    return await this.userRepository.save(updated);
+  id: string,
+  updateUserDto: UpdateUserDto,
+): Promise<UserEntity> {
+  if (!updateUserDto) {
+    throw new BadRequestException('Corpo da requisição vazio');
   }
+
+  const user = await this.findById(id);
+
+  if (typeof updateUserDto.password === 'string' && updateUserDto.password.trim() !== '') {
+    updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+  }
+
+  if (updateUserDto.email && updateUserDto.email !== user.email) {
+    const existing = await this.userRepository.findOne({
+      where: { email: updateUserDto.email },
+    });
+    if (existing) {
+      throw new ConflictException(`This e-mail ${updateUserDto.email} is already in use`);
+    }
+  }
+
+  const updated = Object.assign(user, updateUserDto);
+  return await this.userRepository.save(updated);
+}
 
   //DELETE USER
   async deleteUser(id: string): Promise<{ message: string }> {

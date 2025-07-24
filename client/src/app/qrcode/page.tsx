@@ -1,15 +1,15 @@
 "use client";
 
+import { useScanData } from "./hook/useScan";
+import { useQrcodeData } from "./hook/useQrcode";
+import { useState } from "react";
+import { QrCode } from "@/app/qrcode/types/types";
+import { MapPin, QrCodeIcon, ScanLine, Trophy } from "lucide-react";
 import ScanTable from "@/components/ScanTable";
 import QrcodeForm from "@/components/QrcodeForm";
 import QrcodeTable from "@/components/QrcodeTable";
-import { useScanData } from "./hook/useScan";
-import { useQrcodeData } from "./hook/useQrcode";
-import ModalQrcode from "@/components/modal/ModalQrcode";
-import { useState } from "react";
-import { QrCode } from "@/app/qrcode/types/types";
 import InfoCard from "@/components/Card";
-import { MapPin, QrCodeIcon, ScanLine, Trophy } from "lucide-react";
+import ModalQrcode from "@/components/modal/ModalQrcode";
 
 export default function QrcodePage() {
   const [showEditModal, setShowEditModal] = useState(false);

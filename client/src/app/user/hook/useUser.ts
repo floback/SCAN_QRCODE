@@ -1,67 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { User } from "../types/types";
 import {
   fetchUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-  toggleUserStatus,
+  createUser as createUserApi,
+  updateUser as updateUserApi,
+  deleteUser as deleteUserApi,
 } from "../services/user.service";
 
 export function useUserManagement() {
   const [users, setUsers] = useState<User[]>([]);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searchUser, setSearchUser] = useState("");
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  const loadUsers = async () => {
-    const res = await fetchUsers();
-    setUsers(res);
+  const fetchData = async () => {
+    setLoading(true);
+    const data = await fetchUsers();
+    if (data) setUsers(data);
+    setLoading(false);
   };
 
-  const handleCreateUser = async (data: Partial<User>) => {
-    const newUser = await createUser(data);
-    setUsers((prev) => [...prev, newUser]);
+  const createUser = async (newUser: Partial<User>) => {
+    const created = await createUserApi(newUser);
+    if (created) setUsers((prev) => [...prev, created]);
+    else setError("Erro ao criar usuário");
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteUser(id);
-    setUsers((prev) => prev.filter((user) => user.id !== id));
+  const updateUser = async (id: string, updateData: Partial<User>) => {
+    const updated = await updateUserApi(id, updateData);
+    if (updated) {
+      setUsers((prev) =>
+        prev.map((user) => (user.id === id ? updated : user))
+      );
+    } else {
+      setError("Erro ao atualizar usuário");
+      console.log("Atualizando com dados:", updateData);
+
+    }
+  };
+
+  const deleteUser = async (id: string) => {
+    const success = await deleteUserApi(id);
+    if (success) {
+      setUsers((prev) => prev.filter((user) => user.id !== id));
+    } else {
+      setError("Erro ao deletar usuário");
+    }
   };
 
   const handleToggleStatus = async (id: string, currentStatus: boolean) => {
-  try {
     await updateUser(id, { status: !currentStatus });
-    await fetchUsers();
-  } catch (error) {
-    console.error("Erro ao alterar status:", error);
-  }
-};
+  };
 
   const handleEdit = (id: string) => {
     setEditingUserId(id);
   };
 
   const handleSaveEdit = async (id: string, updatedData: Partial<User>) => {
-    const updated = await updateUser(id, updatedData);
-    setUsers((prev) =>
-      prev.map((user) => (user.id === id ? updated : user))
-    );
+    await updateUser(id, updatedData);
     setEditingUserId(null);
   };
 
- 
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) =>
+      Object.values(user).some((value) =>
+        String(value).toLowerCase().includes(searchUser.toLowerCase())
+      )
+    );
+  }, [users, searchUser]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return {
-    users,
+    users: filteredUsers,
+    loading,
+    error,
     editingUserId,
-    handleDelete,
-    handleToggleStatus,
+    setEditingUserId,
+    searchUser,
+    setSearchUser,
+    createUser,
+    updateUser,
+    deleteUser,
     handleEdit,
     handleSaveEdit,
-    handleCreateUser,
+    handleToggleStatus,
+    fetchData,
   };
 }

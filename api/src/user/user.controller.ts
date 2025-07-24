@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/create-update-user.dto'
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guard/jtw-auth-guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
@@ -55,9 +56,9 @@ export class UserController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() createUserDto: CreateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
-    return this.userService.updateUser(id, createUserDto);
+    return this.userService.updateUser(id, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

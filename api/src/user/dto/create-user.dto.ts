@@ -4,7 +4,6 @@ import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional, IsEnum, IsUUID } 
   owner = 'OWNER',
   admin = 'ADMIN',
   user = 'USER',
-  viwer = 'VIWER'
 }
 export class CreateUserDto {
 
@@ -15,7 +14,7 @@ id?: string;
 
 
   @IsEmail()
-  email: string;
+  email?: string;
 
   @IsString()
   @IsNotEmpty()

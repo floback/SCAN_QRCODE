@@ -2,10 +2,6 @@
 
 import { useState } from "react";
 import { useUserManagement } from "./hook/useUser";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import { Label } from "@/components/Label";
-import InfoCard from "@/components/Card";
 import { User } from "./types/types";
 import { ModalUser } from "@/components/modal/Modaluser";
 import {
@@ -19,6 +15,9 @@ import {
   Info,
   Users,
 } from "lucide-react";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import InfoCard from "@/components/Card";
 
 enum UserType {
   ADMIN = "ADMIN",
@@ -29,11 +28,11 @@ export default function UserManagementPage() {
   const {
     users,
     editingUserId,
-    handleDelete,
+    deleteUser,
     handleToggleStatus,
     handleEdit,
     handleSaveEdit,
-    handleCreateUser, // ✅ Certifique-se de que está implementado no hook
+    createUser,
   } = useUserManagement();
 
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
@@ -91,7 +90,7 @@ export default function UserManagementPage() {
               isOpen={isCreateModalOpen}
               onClose={() => setIsCreateModalOpen(false)}
               onSave={async (data) => {
-                await handleCreateUser(data);
+                await createUser(data);
                 setIsCreateModalOpen(false);
               }}
             />
@@ -160,9 +159,24 @@ export default function UserManagementPage() {
                           </label>
                         </td>
                         <td className="px-4 py-3 flex justify-center gap-2">
-                          <Button typeStyle="primary" size="md" fullWidth={false} onClick={() => handleSaveEdit(user.id, editedUser).then(() => setEditedUser({}))}>
+                          <Button
+                            typeStyle="primary"
+                            size="md"
+                            fullWidth={false}
+                            onClick={() => {
+                              const completeUserData = {
+                                name: editedUser.name ?? user.name,
+                                email: editedUser.email ?? user.email,
+                                ...(editedUser.password ? { password: editedUser.password } : {}),
+                                type_user: editedUser.type_user ?? user.type_user,
+                                status: editedUser.status ?? user.status,
+                              };
+                              handleSaveEdit(user.id, completeUserData).then(() => setEditedUser({}));
+                            }}
+                          >
                             <Check size={20} />
                           </Button>
+
                         </td>
                       </>
                     ) : (
@@ -180,7 +194,7 @@ export default function UserManagementPage() {
                           <button className="text-cyan-600 hover:text-cyan-800" onClick={() => { handleEdit(user.id); setEditedUser(user); }}>
                             <Pencil size={20} />
                           </button>
-                          <button className="text-red-600 hover:text-red-800" onClick={() => handleDelete(user.id)}>
+                          <button className="text-red-600 hover:text-red-800" onClick={() => deleteUser(user.id)}>
                             <Trash size={20} />
                           </button>
                         </td>
