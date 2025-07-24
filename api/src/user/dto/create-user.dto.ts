@@ -1,9 +1,9 @@
 import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional, IsEnum, IsUUID } from 'class-validator';
 
  export enum  UserType  {
-  owner = 'OWNER',
-  admin = 'ADMIN',
-  user = 'USER',
+  owner = 'owner',
+  admin = 'admin',
+  user = 'user',
 }
 export class CreateUserDto {
 

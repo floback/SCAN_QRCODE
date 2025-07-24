@@ -1,7 +1,7 @@
 export enum UserType {
-  OWNER = "OWNER",
-  ADMIN = "ADMIN",
-  USER = "USER",
+  owner = "owner",
+  admin = "admin",
+  user = "user",
 }
 
 export interface User {

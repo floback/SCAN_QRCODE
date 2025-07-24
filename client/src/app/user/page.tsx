@@ -14,14 +14,17 @@ import {
   Plus,
   Info,
   Users,
+  Disc,
+  Dot,
 } from "lucide-react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import InfoCard from "@/components/Card";
 
 enum UserType {
-  ADMIN = "ADMIN",
-  USER = "USER",
+
+  admin = "admin",
+  user = "user",
 }
 
 export default function UserManagementPage() {
@@ -38,7 +41,7 @@ export default function UserManagementPage() {
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // ✅ MOVIDO para o escopo correto
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); 
 
   const totalAdmins = users.filter((user) => user.type_user.toLowerCase() === "admin").length;
   const totalNormalUsers = users.filter((user) => user.type_user.toLowerCase() === "user").length;
@@ -66,11 +69,11 @@ export default function UserManagementPage() {
 
           <div className="flex flex-wrap gap-3 justify-end items-center w-full">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-800" />
-              <input
+              <Search className="absolute left-2 top-3 h-5 w-5 text-gray-800" />
+              <Input
                 type="text"
                 placeholder="Buscar por nome"
-                className="pl-10 pr-4 py-2 border-2 border-gray-300 rounded-md text-base shadow-md bg-white text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="pl-10"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -96,7 +99,6 @@ export default function UserManagementPage() {
             />
 
             <Button
-              size="md"
               typeStyle="secondary"
               fullWidth={false}
               onClick={() => setIsCreateModalOpen(true)}
@@ -146,22 +148,10 @@ export default function UserManagementPage() {
                             ))}
                           </select>
                         </td>
-                        <td className="px-4 py-3">
-                          <label className="relative inline-flex items-center cursor-pointer">
-                            <input
-                              type="checkbox"
-                              className="sr-only peer"
-                              checked={editedUser.status ?? user.status}
-                              onChange={(e) => setEditedUser({ ...editedUser, status: e.target.checked })}
-                            />
-                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 transition" />
-                            <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-full" />
-                          </label>
-                        </td>
+                    
                         <td className="px-4 py-3 flex justify-center gap-2">
                           <Button
                             typeStyle="primary"
-                            size="md"
                             fullWidth={false}
                             onClick={() => {
                               const completeUserData = {
@@ -187,7 +177,7 @@ export default function UserManagementPage() {
                         <td className="px-4 py-3">{user.type_user}</td>
                         <td className="px-4 py-3">
                           <button onClick={() => handleToggleStatus(user.id, user.status)}>
-                            {user.status ? <Circle className="text-green-500" size={20} /> : <CircleDot className="text-red-500" size={20} />}
+                            {user.status ? <Disc className="text-green-500" size={25}/> : <Disc className="text-red-500" size={20} />}
                           </button>
                         </td>
                         <td className="px-4 py-3 flex justify-center gap-3">
@@ -210,11 +200,11 @@ export default function UserManagementPage() {
         {/* Legenda */}
         <div className="mt-6 text-base text-gray-600 flex items-center gap-5">
           <div className="flex items-center gap-2">
-            <Circle className="text-green-500" size={14} />
+            <Disc className="text-green-500" size={14} />
             <span>Active</span>
           </div>
           <div className="flex items-center gap-2">
-            <CircleDot className="text-red-500" size={14} />
+            <Disc className="text-red-500" size={14} />
             <span>Inactive</span>
           </div>
           <div className="flex items-center gap-2 text-gray-400 ml-auto">
