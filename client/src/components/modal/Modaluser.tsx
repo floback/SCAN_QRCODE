@@ -68,10 +68,10 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
           <select
             className="border rounded px-4 py-2 text-base"
             value={formData.type_user}
-            onChange={(e) => setFormData({ ...formData, type_user: e.target.value as "USER" | "ADMIN" })}
+            onChange={(e) => setFormData({ ...formData, type_user: e.target.value as "user" | "admin" })}
           >
-            <option value="USER">Usuário</option>
-            <option value="ADMIN">Administrador</option>
+            <option value="user">Usuário</option>
+            <option value="admin">Administrador</option>
           </select>
 
           <label className="flex items-center gap-2 mt-2">

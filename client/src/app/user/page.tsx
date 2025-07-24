@@ -9,8 +9,6 @@ import {
   Pencil,
   Trash,
   Check,
-  Circle,
-  CircleDot,
   Plus,
   Info,
   Users,
@@ -20,6 +18,7 @@ import {
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import InfoCard from "@/components/Card";
+import UserTable from "@/components/UserTable";
 
 enum UserType {
 
@@ -41,7 +40,7 @@ export default function UserManagementPage() {
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); 
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const totalAdmins = users.filter((user) => user.type_user.toLowerCase() === "admin").length;
   const totalNormalUsers = users.filter((user) => user.type_user.toLowerCase() === "user").length;
@@ -109,93 +108,17 @@ export default function UserManagementPage() {
         </div>
 
         {/* Tabela */}
-        <div className="overflow-x-auto rounded-xl shadow">
-          <table className="min-w-full text-lg text-center text-gray-700">
-            <thead className="bg-gray-100 text-base uppercase text-gray-600">
-              <tr>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Password</th>
-                <th className="px-4 py-3">Type</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user) => {
-                const isEditing = editingUserId === user.id;
-                return (
-                  <tr key={user.id} className="odd:bg-white even:bg-gray-50 hover:bg-cyan-50 border-b">
-                    {isEditing ? (
-                      <>
-                        <td className="px-4 py-3">
-                          <Input defaultValue={user.name} onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })} />
-                        </td>
-                        <td className="px-4 py-3">
-                          <Input defaultValue={user.email} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} />
-                        </td>
-                        <td className="px-4 py-3">
-                          <Input placeholder="••••••••" showTogglePassword onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} />
-                        </td>
-                        <td className="px-4 py-3">
-                          <select
-                            defaultValue={user.type_user}
-                            onChange={(e) => setEditedUser({ ...editedUser, type_user: e.target.value as UserType })}
-                            className="w-full border rounded px-3 py-2 text-base"
-                          >
-                            {Object.values(UserType).map((type) => (
-                              <option key={type} value={type}>{type}</option>
-                            ))}
-                          </select>
-                        </td>
-                    
-                        <td className="px-4 py-3 flex justify-center gap-2">
-                          <Button
-                            typeStyle="primary"
-                            fullWidth={false}
-                            onClick={() => {
-                              const completeUserData = {
-                                name: editedUser.name ?? user.name,
-                                email: editedUser.email ?? user.email,
-                                ...(editedUser.password ? { password: editedUser.password } : {}),
-                                type_user: editedUser.type_user ?? user.type_user,
-                                status: editedUser.status ?? user.status,
-                              };
-                              handleSaveEdit(user.id, completeUserData).then(() => setEditedUser({}));
-                            }}
-                          >
-                            <Check size={20} />
-                          </Button>
-
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="px-4 py-3">{user.name}</td>
-                        <td className="px-4 py-3">{user.email}</td>
-                        <td className="px-4 py-3">••••••••</td>
-                        <td className="px-4 py-3">{user.type_user}</td>
-                        <td className="px-4 py-3">
-                          <button onClick={() => handleToggleStatus(user.id, user.status)}>
-                            {user.status ? <Disc className="text-green-500" size={25}/> : <Disc className="text-red-500" size={20} />}
-                          </button>
-                        </td>
-                        <td className="px-4 py-3 flex justify-center gap-3">
-                          <button className="text-cyan-600 hover:text-cyan-800" onClick={() => { handleEdit(user.id); setEditedUser(user); }}>
-                            <Pencil size={20} />
-                          </button>
-                          <button className="text-red-600 hover:text-red-800" onClick={() => deleteUser(user.id)}>
-                            <Trash size={20} />
-                          </button>
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <UserTable
+          users={users}
+          filteredUsers={filteredUsers}
+          editingUserId={editingUserId}
+          editedUser={editedUser}
+          setEditedUser={setEditedUser}
+          handleEdit={handleEdit}
+          handleSaveEdit={handleSaveEdit}
+          deleteUser={deleteUser}
+          handleToggleStatus={handleToggleStatus}
+        />
 
         {/* Legenda */}
         <div className="mt-6 text-base text-gray-600 flex items-center gap-5">
