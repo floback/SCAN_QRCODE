@@ -12,12 +12,18 @@ interface ModalUserProps {
   onSave: (data: Partial<User>) => void;
 }
 
+
+enum UserType{
+  admin = "admin",
+  user = "user"
+}
+
 export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState<Partial<User>>({
     name: "",
     email: "",
     password: "",
-    type_user: "USER",
+    type_user: UserType.user,
     status: true,
   });
 
@@ -27,7 +33,7 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
         name: "",
         email: "",
         password: "",
-        type_user: "USER",
+        type_user: UserType.user,
         status: true,
       });
     }
