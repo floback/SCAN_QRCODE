@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { User } from "../../app/user/types/types";
-import Button from "../Button";
-import Input from "../Input";
+import { User } from "../../types/types";
+import Button from "../../../../components/Button";
+import Input from "../../../../components/Input";
 
 interface ModalUserProps {
   isOpen: boolean;

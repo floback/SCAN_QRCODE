@@ -1,9 +1,9 @@
 // src/components/UserTable.tsx
 
-import  Input  from "./Input";
+import  Input  from "../../../components/Input";
 import Button from "@/components/Button";
 import { Check, Pencil, Trash, Disc } from "lucide-react";
-import { User, UserType } from "../app/user/types/types";
+import { User, UserType } from "../types/types";
 
 interface UserTableProps {
   users: User[];
