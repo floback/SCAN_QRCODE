@@ -11,6 +11,7 @@
         "ClientEmail",
         "ClientUserRegister",
         "ClientUser",
-        "ApiUser"
+        "ApiUser",
+        "SiderBarMenu"
     ]
 }

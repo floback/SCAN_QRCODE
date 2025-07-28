@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from "react";
 import { useUserManagement } from "./hook/useUser";
@@ -8,12 +8,7 @@ import UserHeader from "./components/UserHeader";
 import UserStatsCards from "./components/UserCards";
 import UserFilters from "./components/UserFilters";
 import UserStatusLegend from "./components/UserStatusLegend";
-
-enum UserType {
-
-  admin = "admin",
-  user = "user",
-}
+import Sidebar from "@/components/SiderBarMenu";
 
 export default function UserManagementPage() {
   const {
@@ -26,6 +21,7 @@ export default function UserManagementPage() {
     createUser,
   } = useUserManagement();
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
@@ -44,41 +40,48 @@ export default function UserManagementPage() {
   });
 
   return (
-   <div className="min-h-screen bg-cyan-100 px-8 py-10 font-sans text-base">
-  <div className="bg-white rounded-3xl p-8 shadow-lg max-w-7xl mx-auto">
-    <UserHeader />
+    <div className="flex bg-cyan-100 min-h-screen">
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start mb-8">
-      <UserStatsCards
-        totalUsers={users.length}
-        totalAdmins={totalAdmins}
-        totalNormalUsers={totalNormalUsers}
-      />
-      <UserFilters
-        search={search}
-        setSearch={setSearch}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        isCreateModalOpen={isCreateModalOpen}
-        setIsCreateModalOpen={setIsCreateModalOpen}
-        createUser={createUser}
-      />
+      <main
+        className={`flex-1 transition-all duration-300 p-4 lg:p-6 ${
+          isSidebarOpen ? "ml-52" : "ml-16"
+        }`}
+      >
+        <div className="bg-white rounded-3xl p-8 shadow-lg max-w-7xl mx-auto">
+          <UserHeader />
+
+          <UserStatsCards
+            totalUsers={users.length}
+            totalAdmins={totalAdmins}
+            totalNormalUsers={totalNormalUsers}
+          />
+
+          <UserFilters
+            search={search}
+            setSearch={setSearch}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            isCreateModalOpen={isCreateModalOpen}
+            setIsCreateModalOpen={setIsCreateModalOpen}
+            createUser={createUser}
+          />
+
+          <UserTable
+            users={users}
+            filteredUsers={filteredUsers}
+            editingUserId={editingUserId}
+            editedUser={editedUser}
+            setEditedUser={setEditedUser}
+            handleEdit={handleEdit}
+            handleSaveEdit={handleSaveEdit}
+            deleteUser={deleteUser}
+            handleToggleStatus={handleToggleStatus}
+          />
+
+          <UserStatusLegend />
+        </div>
+      </main>
     </div>
-
-    <UserTable
-      users={users}
-      filteredUsers={filteredUsers}
-      editingUserId={editingUserId}
-      editedUser={editedUser}
-      setEditedUser={setEditedUser}
-      handleEdit={handleEdit}
-      handleSaveEdit={handleSaveEdit}
-      deleteUser={deleteUser}
-      handleToggleStatus={handleToggleStatus}
-    />
-
-    <UserStatusLegend />
-  </div>
-</div>
   );
 }
