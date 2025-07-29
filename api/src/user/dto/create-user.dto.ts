@@ -24,6 +24,10 @@ id?: string;
   @IsNotEmpty()
   password: string;
 
+  @IsString()
+  @IsOptional()
+  avatar: string;
+  
   @IsEnum(UserType)
   @IsOptional()
   type_user?: UserType;

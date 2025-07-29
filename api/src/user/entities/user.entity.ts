@@ -17,6 +17,13 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column({
+    type: 'varchar',
+    length:500,
+    nullable: true
+  })
+  avatar?: string;
+
   @Column({ type: 'enum', enum: UserType, default: UserType.user })
   type_user: UserType;
 
