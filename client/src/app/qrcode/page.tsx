@@ -52,7 +52,7 @@ export default function QrcodePage() {
   } = useScanData();
 
   return (
-    <div className="flex">
+    <div className="flex bg-cyan-100 min-h-screen">
       {/* Sidebar fixo */}
       <SiderBarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)} />
 
