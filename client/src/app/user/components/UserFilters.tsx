@@ -55,13 +55,15 @@ export default function UserFilters({
         }}
       />
 
-      <Button
-        typeStyle="secondary"
-        fullWidth={false}
-        onClick={() => setIsCreateModalOpen(true)}
-      >
-        <Plus className="mr-1" /> Add User
-      </Button>
+   <Button
+  typeStyle="secondary"
+  fullWidth={false}
+  onClick={() => setIsCreateModalOpen(true)}
+  className="text-sm px-2 py-1 my-2 mx-2"
+>
+  <Plus className="mr-1 w-4 h-4" /> Add User
+</Button>
+
     </div>
   );
 }

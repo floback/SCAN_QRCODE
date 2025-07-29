@@ -44,8 +44,10 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         md:rounded-r-2xl`}
       >
         <div className="flex flex-col h-full justify-between">
+          {/* TOPO: Logo + Usuário */}
           <div>
-            <div className="mb-7 flex items-center justify-center transition-all">
+            {/* Logo */}
+            <div className="mb-4 flex items-center justify-center">
               <Image
                 src="/logo.png"
                 alt="Logo"
@@ -54,6 +56,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
               />
             </div>
 
+            {/* Botão de abrir/fechar */}
             <button
               onClick={toggleSidebar}
               className="absolute -right-3 top-0 transform translate-x-full bg-white border border-gray-300 shadow-md rounded-full p-1 hover:bg-gray-100 transition-all"
@@ -61,33 +64,9 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
               {isSidebarOpen ? <MenuSquare size={20} /> : <MenuIcon size={20} />}
             </button>
 
-            {isSidebarOpen && (
-              <div
-                className="fixed inset-0 bg-black/30 z-30 md:hidden"
-                onClick={toggleSidebar}
-              />
-            )}
-
-            <nav className="space-y-2">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === item.href
-                      ? "bg-cyan-100 text-cyan-800 font-semibold"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  {item.icon}
-                  {isSidebarOpen && <span>{item.label}</span>}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Usuário logado */}
+            {/* Info do usuário */}
             {user && (
-              <div className="flex items-center gap-3 px-3 py-2 mt-6 rounded-lg bg-gray-100">
+              <div className="flex items-center gap-3 px-2 py-2 mb-5 rounded-lg bg-gray-100">
                 {user.avatar ? (
                   <Image
                     src={user.avatar}
@@ -110,8 +89,35 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 )}
               </div>
             )}
+
+            {/* Overlay para mobile */}
+            {isSidebarOpen && (
+              <div
+                className="fixed inset-0 bg-black/30 z-30 md:hidden"
+                onClick={toggleSidebar}
+              />
+            )}
+
+            {/* Navegação */}
+            <nav className="space-y-2">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === item.href
+                      ? "bg-cyan-100 text-cyan-800 font-semibold"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.icon}
+                  {isSidebarOpen && <span>{item.label}</span>}
+                </Link>
+              ))}
+            </nav>
           </div>
 
+          {/* Rodapé: Sair */}
           <div className="mt-4 border-t border-gray-200 pt-4">
             <Link
               href="/auth"

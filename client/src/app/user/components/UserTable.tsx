@@ -29,7 +29,7 @@ export default function UserTable({
   handleToggleStatus,
 }: UserTableProps) {
   return (
-    <div className="overflow-x-auto rounded-xl shadow">
+    <div className="overflow-x-auto overflow-y-auto max-h-[500px] rounded-xl shadow">
       <table className="min-w-full text-lg text-center text-gray-700">
         <thead className="bg-gray-100 text-base uppercase text-gray-600">
           <tr>

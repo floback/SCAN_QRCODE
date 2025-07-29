@@ -56,7 +56,7 @@ export default function UserManagementPage() {
             totalAdmins={totalAdmins}
             totalNormalUsers={totalNormalUsers}
           />
-
+          
           <UserFilters
             search={search}
             setSearch={setSearch}
@@ -66,6 +66,7 @@ export default function UserManagementPage() {
             setIsCreateModalOpen={setIsCreateModalOpen}
             createUser={createUser}
           />
+        
 
           <UserTable
             users={users}
