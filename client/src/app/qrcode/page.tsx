@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useScanData } from "./hook/useScan";
+import { useScanData } from "../scan/hook/useScan";
 import { useQrcodeData } from "./hook/useQrcode";
 import { QrCode } from "@/app/qrcode/types/types";
 import {
@@ -11,11 +11,11 @@ import {
   Trophy,
 } from "lucide-react";
 
-import ScanTable from "@/components/ScanTable";
-import QrcodeForm from "@/components/QrcodeForm";
-import QrcodeTable from "@/components/QrcodeTable";
+import ScanTable from "@/app/scan/components/ScanTable";
+import QrcodeForm from "@/app/qrcode/components/QrcodeForm";
+import QrcodeTable from "@/app/qrcode/components/QrcodeTable";
 import InfoCard from "@/components/Card";
-import ModalQrcode from "@/components/modal/ModalQrcode";
+import ModalQrcode from "@/app/qrcode/components/modal/ModalQrcode";
 import SiderBarMenu from "@/components/SiderBarMenu"; // Certifique-se que o caminho está correto
 
 export default function QrcodePage() {
