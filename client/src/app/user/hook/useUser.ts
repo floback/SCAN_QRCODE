@@ -23,11 +23,13 @@ export function useUserManagement() {
     setLoading(false);
   };
 
-  const createUser = async (newUser: Partial<User>) => {
-    const created = await createUserApi(newUser);
-    if (created) setUsers((prev) => [...prev, created]);
-    else setError("Erro ao criar usuário");
-  };
+const createUser = async (newUser: Partial<User>) => {
+  const { status, ...userWithoutStatus } = newUser; // remove status
+  const created = await createUserApi(userWithoutStatus);
+  if (created) setUsers((prev) => [...prev, created]);
+  else setError("Erro ao criar usuário");
+};
+
 
   const updateUser = async (id: string, updateData: Partial<User>) => {
     const updated = await updateUserApi(id, updateData);

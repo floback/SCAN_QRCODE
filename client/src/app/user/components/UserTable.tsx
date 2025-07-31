@@ -127,7 +127,7 @@ export default function UserTable({
                             formData.append("password", editedUser.password);
                           }
                           formData.append("type_user", editedUser.type_user ?? user.type_user);
-                          formData.append("status", String(editedUser.status ?? user.status));
+                          // formData.append("status", String(editedUser.status ?? user.status));
                           if (editedUser.avatar instanceof File) {
                             formData.append("avatar", editedUser.avatar);
                           }

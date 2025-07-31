@@ -23,7 +23,7 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
     email: "",
     password: "",
     type_user: UserType.user,
-    status: true,
+    // status: true, // não incluir na criação
   });
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -36,7 +36,6 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
         email: "",
         password: "",
         type_user: UserType.user,
-        status: true,
       });
       setAvatarFile(null);
       setAvatarPreview(null);
@@ -52,8 +51,11 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
   };
 
   const handleSave = () => {
-    // Aqui você pode incluir lógica para salvar o avatar (upload separado)
-    onSave({ ...formData, avatar: avatarFile });
+    // Remove status caso esteja presente
+    const { status, ...dataToSave } = formData;
+    const payload = { ...dataToSave, avatar: avatarFile };
+delete (payload as any).status;
+onSave(payload);
   };
 
   if (!isOpen) return null;
@@ -91,22 +93,15 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
           <select
             className="border rounded px-4 py-2 text-base"
             value={formData.type_user}
-            onChange={(e) => setFormData({ ...formData, type_user: e.target.value as "user" | "admin" })}
+            onChange={(e) =>
+              setFormData({ ...formData, type_user: e.target.value as "user" | "admin" })
+            }
           >
             <option value="user">Usuário</option>
             <option value="admin">Administrador</option>
           </select>
 
-          <label className="flex items-center gap-2 mt-2">
-            <input
-              type="checkbox"
-              checked={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.checked })}
-            />
-            Ativo
-          </label>
-
-          {/* Campo de Avatar */}
+          {/* Avatar Upload */}
           <div className="mt-2">
             <label className="block mb-1 text-sm text-gray-700 font-medium">
               Avatar (opcional)
