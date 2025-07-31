@@ -1,4 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional, IsEnum, IsUUID } from 'class-validator';
+import { Transform } from 'class-transformer';
+
 
  export enum  UserType  {
   owner = 'owner',
@@ -7,10 +9,10 @@ import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional, IsEnum, IsUUID } 
 }
 export class CreateUserDto {
 
-@IsOptional()
-@IsString()
-@IsUUID()
-id?: string;
+  @IsOptional()
+  @IsString()
+  @IsUUID()
+  id?: string;
 
 
   @IsEmail()
@@ -18,15 +20,15 @@ id?: string;
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name?: string;
 
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  @IsString()
   @IsOptional()
-  avatar: string;
+  @IsString()
+  avatar?: string;
   
   @IsEnum(UserType)
   @IsOptional()
@@ -35,5 +37,7 @@ id?: string;
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  readonly isActive: boolean;
   status?: boolean;
 }

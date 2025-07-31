@@ -51,9 +51,13 @@ export function useUserManagement() {
     }
   };
 
-  const handleToggleStatus = async (id: string, currentStatus: boolean) => {
-    await updateUser(id, { status: !currentStatus });
-  };
+ const handleToggleStatus = async (id: string, currentStatus: boolean) => {
+  const formData = new FormData();
+  formData.append("status", String(!currentStatus));
+
+  await updateUser(id, formData);
+};
+
 
   const handleEdit = (id: string) => {
     setEditingUserId(id);

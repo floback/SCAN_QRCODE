@@ -30,13 +30,13 @@ export const deleteUser = async (
 //ATUALIZAR USER
 export const updateUser = async (
   id: string,
-  updateData: Partial<User>
+  updateData: FormData
 ): Promise<User | null> => {
   return await fetchWithAuth<User>(
     `${process.env.NEXT_PUBLIC_API_URL}/user/${id}`,
     {
       method: "PATCH",
-      body: JSON.stringify(updateData), 
+      body: updateData,
     }
   );
 };

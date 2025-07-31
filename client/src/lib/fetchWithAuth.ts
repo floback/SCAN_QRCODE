@@ -13,7 +13,12 @@ export async function fetchWithAuth<T = any>(
 
     const headers = new Headers(options.headers || {});
     headers.set("Authorization", `Bearer ${token}`);
-    headers.set("Content-Type", "application/json");
+
+    // Só adiciona Content-Type JSON se não for FormData
+    const isFormData = options.body instanceof FormData;
+    if (!isFormData) {
+      headers.set("Content-Type", "application/json");
+    }
 
     const response = await fetch(url, {
       ...options,
@@ -34,14 +39,12 @@ export async function fetchWithAuth<T = any>(
     }
 
     if (response.status === 204) {
-      // DELETE geralmente retorna 204 No Content
       return true as T;
     }
 
     return await response.json();
   } catch (error) {
     console.error("Erro inesperado:", error);
-    // Só redireciona se for um erro de autenticação — NÃO aqui!
     return null;
   }
 }

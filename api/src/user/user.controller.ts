@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,7 +19,9 @@ import { JwtAuthGuard } from 'src/auth/guard/jtw-auth-guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Roles } from 'src/auth/decoraters/ roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import  { extname }  from 'path';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
@@ -54,12 +59,33 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.OWNER, Role.ADMIN)
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserEntity> {
-    return this.userService.updateUser(id, updateUserDto);
-  }
+@UseInterceptors(FileInterceptor('avatar', {
+  storage: diskStorage({
+    destination: './uploads/avatar',
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const ext = extname(file.originalname);
+      cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+    },
+  }),
+  fileFilter: (req, file, cb) => {
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new BadRequestException('Tipo de arquivo inválido!'), false);
+    }
+  },
+}))
+async updateUser(
+  @Param('id') id: string,
+  @Body() updateUserDto: UpdateUserDto,
+  @UploadedFile() avatar?: Express.Multer.File,
+) {
+  return this.userService.updateUser(id, updateUserDto, avatar?.filename); // <-- importante passar filename
+}
+
+
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.OWNER, Role.ADMIN)

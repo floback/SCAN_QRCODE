@@ -9,6 +9,7 @@ interface AuthUser {
   name: string;
   type_user: string;
   status: boolean;
+  avatar: string;
 }
 
 interface AuthContextProps {

@@ -9,5 +9,6 @@ export interface User {
   email: string;
   password: string;
   type_user: UserType;
-  status: boolean;
+  status?: boolean;
+  avatar?: string;
 }

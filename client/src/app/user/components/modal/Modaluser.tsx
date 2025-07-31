@@ -12,8 +12,7 @@ interface ModalUserProps {
   onSave: (data: Partial<User>) => void;
 }
 
-
-enum UserType{
+enum UserType {
   admin = "admin",
   user = "user"
 }
@@ -27,6 +26,9 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
     status: true,
   });
 
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+
   useEffect(() => {
     if (!isOpen) {
       setFormData({
@@ -36,8 +38,23 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
         type_user: UserType.user,
         status: true,
       });
+      setAvatarFile(null);
+      setAvatarPreview(null);
     }
   }, [isOpen]);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSave = () => {
+    // Aqui você pode incluir lógica para salvar o avatar (upload separado)
+    onSave({ ...formData, avatar: avatarFile });
+  };
 
   if (!isOpen) return null;
 
@@ -88,13 +105,33 @@ export const ModalUser: React.FC<ModalUserProps> = ({ isOpen, onClose, onSave })
             />
             Ativo
           </label>
+
+          {/* Campo de Avatar */}
+          <div className="mt-2">
+            <label className="block mb-1 text-sm text-gray-700 font-medium">
+              Avatar (opcional)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+            />
+            {avatarPreview && (
+              <img
+                src={avatarPreview}
+                alt="Preview do avatar"
+                className="mt-2 h-20 w-20 object-cover rounded-full border"
+              />
+            )}
+          </div>
         </div>
 
         <div className="flex justify-end gap-4 mt-6">
           <Button typeStyle="secondary" onClick={onClose}>
             Cancelar
           </Button>
-          <Button typeStyle="secondary" onClick={() => onSave(formData)}>
+          <Button typeStyle="secondary" onClick={handleSave}>
             Salvar
           </Button>
         </div>
