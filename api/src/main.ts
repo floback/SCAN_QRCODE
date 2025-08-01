@@ -15,12 +15,14 @@ async function bootstrap() {
     }),
   );
 
-  // Servir arquivos estáticos da pasta "uploads"
-  app.useStaticAssets(join(__dirname, '..', 'upload'), {
-    prefix: '/upload/',
+  
+  app.useStaticAssets(join(__dirname, '..', '..', 'uploads'), {
+    prefix: '/uploads/',
   });
 
   app.enableCors();
   await app.listen(process.env.PORT ?? 3001);
+
+
 }
 bootstrap();

@@ -30,10 +30,12 @@ export class AuthService {
     }
 
     const payload = {
-      sub: user.id,
+      id: user.id,
+      name: user.name,
       email: user.email,
       type_user: user.type_user,
-      password: user.password,
+      avatar: user.avatar,
+      status: user.status,
     };
 
     const token = this.jwtService.sign(payload);
@@ -46,13 +48,7 @@ export class AuthService {
     return {
       access_token: token,
       expires_in: '1d',
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        type_user: user.type_user,
-      },
-
+      user: payload,
     };
   }
 }
