@@ -1,4 +1,4 @@
-import { ResetPasswordData } from "./resetPassword.types";
+import { ResetPasswordData } from "../types/types";
 
 export async function resetPasswordRequest(data: ResetPasswordData) {
   try {

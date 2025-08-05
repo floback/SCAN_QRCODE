@@ -1,4 +1,4 @@
-import { RecoveryRequest, RecoveryResponse } from "../types/recovery.types";
+import { RecoveryRequest, RecoveryResponse } from "../types/types";
 
 export async function sendRecoveryEmail(payload: RecoveryRequest): Promise<RecoveryResponse> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/email/recovery-password`, {

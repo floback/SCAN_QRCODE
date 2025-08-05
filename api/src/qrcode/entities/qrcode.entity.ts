@@ -47,6 +47,9 @@ export class QrcodeEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   create_date: string;
 
+  @Column({ type: 'varchar', length:500, nullable: true })
+  icone_qrcode: string;
+
   @ManyToOne(() => UserEntity, (user) => user.qrcodes)
   @JoinColumn({ name: 'id_user' })
   user: UserEntity;

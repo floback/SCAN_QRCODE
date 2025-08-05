@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body, Delete, NotFoundException, UseGuards, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Delete, NotFoundException, UseGuards, Patch, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { QrcodeService } from './qrcode.service';
 import { QrcodeEntity } from './entities/qrcode.entity';
 import { JwtAuthGuard } from 'src/auth/guard/jtw-auth-guard';
@@ -6,6 +6,9 @@ import { Request } from '@nestjs/common';
 import { Roles } from 'src/auth/decoraters/ roles.decorator';
 import { CreateQrcodeDto } from './dto/create-qrcode.dto';
 import { Role } from 'src/auth/enums/role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 
 
@@ -25,6 +28,35 @@ export class QrcodeController {
     const { number_fone, link_add, name, app_type } = createQrcodeDto;
     return this.qrcodeService.createQRCode(id_user, number_fone, link_add, name, app_type);
   }
+
+  @UseGuards(JwtAuthGuard)
+@Roles(Role.OWNER, Role.ADMIN, Role.USER)
+@Post('upload-icon')
+@UseInterceptors(
+  FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './downloads/qrcodImagem',
+      filename: (req, file, cb) => {
+        const ext = extname(file.originalname);
+        const uniqueName = `icon-${Date.now()}${ext}`;
+        cb(null, uniqueName);
+      },
+    }),
+    fileFilter: (req, file, cb) => {
+      if (!file.mimetype.startsWith('image/')) {
+        return cb(new Error('Apenas arquivos de imagem são permitidos!'), false);
+      }
+      cb(null, true);
+    },
+  }),
+)
+async uploadIcon(@UploadedFile() file: Express.Multer.File) {
+  return {
+    message: 'Upload de ícone realizado com sucesso!',
+    filename: file.filename,
+    path: `/downloads/qrcodImagem/${file.filename}`,
+  };
+}
 
 
   @UseGuards(JwtAuthGuard)

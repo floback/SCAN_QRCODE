@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordRequest } from "../service/resetPassword.service";
-import { ResetPasswordData } from "../types/resetPassword";
+import { ResetPasswordData } from "../types/types";
 
 
 export const useResetPassword = () => {

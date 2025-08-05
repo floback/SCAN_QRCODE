@@ -33,4 +33,8 @@ export class CreateQrcodeDto {
   @IsOptional()
   @IsString()
   code?: string;
+
+  @IsOptional()
+  @IsString()
+  icone_qrcode?: string;
 }

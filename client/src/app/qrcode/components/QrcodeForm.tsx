@@ -1,7 +1,7 @@
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { Dispatch, SetStateAction, useState } from "react";
-import { CloudDownload, DoorClosed, X } from "lucide-react"
+import { CloudDownload, X } from "lucide-react";
 
 interface Props {
   name: string;
@@ -12,7 +12,7 @@ interface Props {
   setApiConnect: Dispatch<SetStateAction<String>>;
   numberFone: string;
   setNumberFone: Dispatch<SetStateAction<string>>;
-  createQrcode: (data: any) => Promise<any>;
+  createQrcode: (data: FormData) => Promise<any>;
 }
 
 export default function QrcodeForm({
@@ -26,46 +26,50 @@ export default function QrcodeForm({
 }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [generatedQrcode, setGeneratedQrcode] = useState<any>(null);
-
-const handleSubmit = async () => {
-  try {
-    let finalLink = linkAdd;
-
-    if (!finalLink && numberFone) {
-      switch (appType) {
-        case "whatsapp":
-          finalLink = `https://wa.me/${numberFone}`;
-          break;
-        case "telegram":
-          finalLink = `https://t.me/${numberFone}`;
-          break;
-        case "signal":
-          finalLink = `https://signal.me/#p/${numberFone}`;
-          break;
-        default:
-          finalLink = `https://wa.me/${numberFone}`;
-      }
-    }
-
-    const newQR = await createQrcode({
-      link_add: finalLink || undefined,
-      number_fone: numberFone || undefined,
-      name: name || undefined,
-    });
-
-    if (newQR) {
-      console.log("Novo Qrcode:", newQR);
-      setGeneratedQrcode(newQR);
-      setModalVisible(true);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Erro ao gerar QR Code");
-  }
-};
-
-
   const [appType, setAppType] = useState("whatsapp");
+  const [iconFile, setIconFile] = useState<File | null>(null);
+
+  const handleSubmit = async () => {
+    try {
+      let finalLink = linkAdd;
+
+      if (!finalLink && numberFone) {
+        switch (appType) {
+          case "whatsapp":
+            finalLink = `https://wa.me/${numberFone}`;
+            break;
+          case "telegram":
+            finalLink = `https://t.me/${numberFone}`;
+            break;
+          case "signal":
+            finalLink = `https://signal.me/#p/${numberFone}`;
+            break;
+          default:
+            finalLink = `https://wa.me/${numberFone}`;
+        }
+      }
+
+      const formData = new FormData();
+      formData.append("link_add", finalLink || "");
+      formData.append("number_fone", numberFone || "");
+      formData.append("name", name || "");
+      formData.append("app_type", appType);
+
+      if (iconFile) {
+        formData.append("icone_qrcode", iconFile);
+      }
+
+      const newQR = await createQrcode(formData);
+
+      if (newQR) {
+        setGeneratedQrcode(newQR);
+        setModalVisible(true);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao gerar QR Code");
+    }
+  };
 
   return (
     <>
@@ -87,8 +91,19 @@ const handleSubmit = async () => {
           </select>
         </div>
 
-
         <Input size="sm" label="Enter Phone Number" value={numberFone} onChange={(e) => setNumberFone(e.target.value)} placeholder="Ex: 5521921..." />
+
+        {/* Upload de imagem para ícone */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Ícone para o centro (opcional)</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setIconFile(e.target.files?.[0] || null)}
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+          />
+        </div>
+
         <Button typeStyle="secondary" size="sm" onClick={handleSubmit}>Generate</Button>
       </div>
 
@@ -100,15 +115,10 @@ const handleSubmit = async () => {
               QR Code Gerado com Sucesso
             </h2>
             <img
-              src={
-                generatedQrcode.img.startsWith("data:image")
-                  ? generatedQrcode.img
-                  : `data:image/png;base64,${generatedQrcode.img}`
-              }
+              src={generatedQrcode.img}
               alt="QR Code"
               className="mx-auto h-48 w-48 object-contain mb-4"
             />
-
             <div className="flex flex-col items-center gap-2">
               <a
                 href={generatedQrcode.img}
@@ -127,7 +137,6 @@ const handleSubmit = async () => {
           </div>
         </div>
       )}
-
     </>
   );
 }

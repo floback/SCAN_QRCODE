@@ -7,6 +7,10 @@ import * as QRCode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateQrcodeDto } from './dto/create-qrcode.dto';
 import { AppType } from './dto/app-type.enum';
+import { Jimp } from 'jimp';
+import { proQrImg } from 'src/utils/proQrImg';
+
+
 @Injectable()
 export class QrcodeService {
 
@@ -18,61 +22,71 @@ export class QrcodeService {
   ) { }
 
 
-  async createQRCode(
+
+
+async createQRCode(
   id_user: string,
   number_fone?: string,
   link_add?: string,
   name?: string,
-  app_type: AppType = AppType.WHATSAPP, 
+  app_type: AppType = AppType.WHATSAPP,
+  icone_qrcode?: string,
 ): Promise<QrcodeEntity> {
   const uniqueCode = uuidv4();
-
   const finalNumber = number_fone ?? '0000000000';
 
-let finalLink = link_add;
-if (!finalLink) {
-  switch (app_type) {
-    case AppType.NONE:
-      finalLink = `https://none.com`
-      break;
-    case AppType.WHATSAPP:
-      finalLink = `https://wa.me/${finalNumber}`;
-      break;
-    case AppType.TELEGRAM:
-      finalLink = `https://t.me/${finalNumber}`;
-      break;
-    case AppType.SIGNAL:
-      finalLink = `https://signal.me/#p/${finalNumber}`;
-      break;
-    default:
-      finalLink = '';
+  let finalLink = link_add;
+  if (!finalLink) {
+    switch (app_type) {
+      case AppType.NONE:
+        finalLink = `https://none.com`;
+        break;
+      case AppType.WHATSAPP:
+        finalLink = `https://wa.me/${finalNumber}`;
+        break;
+      case AppType.TELEGRAM:
+        finalLink = `https://t.me/${finalNumber}`;
+        break;
+      case AppType.SIGNAL:
+        finalLink = `https://signal.me/#p/${finalNumber}`;
+        break;
+      default:
+        finalLink = '';
+    }
   }
-}
 
-
-  const backendBaseUrl = process.env.BASE_URL || 'https://72ab23e3e8da.ngrok-free.app';
+  const backendBaseUrl = process.env.BASE_URL || 'https://c60d40c589e8.ngrok-free.app';
   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
 
-  const img = await QRCode.toDataURL(qrRedirectLink, {
-    errorCorrectionLevel: 'h',
-    type: 'image/png',
+  // Gera o buffer do QR Code
+  const qrBuffer = await QRCode.toBuffer(qrRedirectLink, {
+    errorCorrectionLevel: 'H',
+    type: 'png',
     scale: 10,
     margin: 2,
     width: 500,
   });
 
+  // Processa a imagem via JS (com ou sem ícone)
+  const base64Image = await proQrImg(qrBuffer, icone_qrcode);
+  if (!base64Image) {
+    throw new Error('Falha ao processar imagem do QR Code');
+  }
+ 
+  // Cria e salva a entidade
   const qrcode = this.qrcodeRepository.create({
     id_user,
     code: uniqueCode,
-    img,
+    img: base64Image,
     status: true,
     link_add: finalLink,
     number_fone: finalNumber,
     name: name ?? 'sem-nome',
-    app_type, // aqui agora tudo certo
+    app_type,
+    icone_qrcode,
   });
 
-  return await this.qrcodeRepository.save(qrcode);
+  return this.qrcodeRepository.save(qrcode);
 }
 
 

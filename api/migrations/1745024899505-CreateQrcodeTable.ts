@@ -60,6 +60,11 @@ export class CreateQrcodeTable1713300000002 implements MigrationInterface {
           type: 'timestamp',
           default: 'CURRENT_TIMESTAMP',
         },
+        {
+          name:  'icone_qrcode',
+          type: 'varchar',
+          isNullable: true,
+        },
       ],
     }));
 

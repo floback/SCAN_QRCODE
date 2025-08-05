@@ -12,6 +12,7 @@
         "ClientUserRegister",
         "ClientUser",
         "ApiUser",
-        "SiderBarMenu"
+        "SiderBarMenu",
+        "ConfigProjet"
     ]
 }
