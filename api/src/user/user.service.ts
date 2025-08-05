@@ -12,6 +12,7 @@ import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Triangle } from 'lucide-react';
 
 @Injectable()
 export class UserService {
@@ -75,6 +76,10 @@ export class UserService {
   avatarFilename?: string,
 ): Promise<UserEntity> {
   const user = await this.findById(id);
+  
+  if(!user.avatar) {
+    this.
+  } 
 
   if (avatarFilename) {
     updateUserDto.avatar = `uploads/avatar/${avatarFilename}`;
