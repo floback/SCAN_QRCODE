@@ -59,7 +59,7 @@ export default function QrcodePage() {
       {/* Conteúdo principal ajustável */}
       <main
         className={`flex-1 transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "ml-52" : "ml-16"
+          isSidebarOpen ? "ml-2" : "ml-16"
         } min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-6 text-sm font-sans`}
       >
         <div className="flex flex-col md:flex-row gap-4 mb-6">

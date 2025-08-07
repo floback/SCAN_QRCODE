@@ -12,7 +12,6 @@ import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Triangle } from 'lucide-react';
 
 @Injectable()
 export class UserService {
@@ -76,24 +75,38 @@ export class UserService {
   avatarFilename?: string,
 ): Promise<UserEntity> {
   const user = await this.findById(id);
-  
-  if(!user.avatar) {
-    this.
-  } 
 
+  // Deleta avatar antigo se existir e for atualizado
   if (avatarFilename) {
-    updateUserDto.avatar = `uploads/avatar/${avatarFilename}`;
+    if (user.avatar) {
+      const oldAvatarPath = path.join(__dirname, '..', '..', 'uploads', 'avatar', path.basename(user.avatar));
+      
+      if (fs.existsSync(oldAvatarPath)) {
+        fs.unlinkSync(oldAvatarPath);
+      }
+    }
+
+    // Atualiza caminho do novo avatar
+    updateUserDto.avatar = avatarFilename;
   }
 
+  // Se a senha estiver presente, faz o hash novamente
+  if (updateUserDto.password) {
+    const salt = await bcrypt.genSalt(10);
+    updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+  } else {
+    // Se não enviar nova senha, mantém a existente
+    updateUserDto.password = user.password;
+  }
 
-if (updateUserDto.status !== undefined) {
-  const status = String(updateUserDto.status).toLowerCase();
-  updateUserDto.status = status === 'true';
-}
-
+  // Evita sobrescrever status com undefined (mantém o atual se não for enviado)
+  if (updateUserDto.status === undefined) {
+    updateUserDto.status = user.status;
+  } else {
+    updateUserDto.status = String(updateUserDto.status).toLowerCase() === 'true';
+  }
 
   const updated = Object.assign(user, updateUserDto);
-  console.log(id, updated)
   return await this.userRepository.save(updated);
 }
 

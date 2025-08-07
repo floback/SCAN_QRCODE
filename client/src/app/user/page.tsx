@@ -45,7 +45,7 @@ export default function UserManagementPage() {
 
       <main
         className={`flex-1 transition-all duration-300 p-4 lg:p-6 ${
-          isSidebarOpen ? "ml-52" : "ml-16"
+          isSidebarOpen ? "ml-5" : "ml-16"
         }`}
       >
         <div className="bg-white rounded-3xl p-8 shadow-lg max-w-7xl mx-auto">

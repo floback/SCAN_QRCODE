@@ -2,6 +2,7 @@
   "dependencies": {
     "@nestjs/platform-socket.io": "^11.1.3",
     "@nestjs/websockets": "^11.1.3",
+    "framer-motion": "^12.23.12",
     "jimp": "^1.6.0",
     "socket.io": "^4.8.1"
   }

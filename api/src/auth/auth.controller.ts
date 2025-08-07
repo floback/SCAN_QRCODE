@@ -8,7 +8,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
-    console.log('Tentando login com', loginDto);
+    console.log(`Usuário logado ${loginDto.email}, ${loginDto.password}`)
     return this.authService.login(loginDto.email, loginDto.password);
   }
 }
