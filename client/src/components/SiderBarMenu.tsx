@@ -47,7 +47,7 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
       <div className="flex flex-col h-full justify-between">
         {/* TOPO: Logo + Toggle */}
         <div>
-          <div className="flex justify-center items-center mb-4 relative">
+          <div className="flex justify-between items-center mb-6 px-1 relative">
             <Image
               src="/logo.png"
               alt="Logo"
@@ -55,14 +55,15 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
               height={40}
             />
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="absolute -right-3 top-0 transform translate-x-full"
+              className="rounded-full shadow-sm hover:bg-cyan-200 transition-colors"
             >
-              {isSidebarOpen ? <MenuSquare size={18} /> : <MenuIcon size={18} />}
+              {isSidebarOpen ? <MenuSquare size={20} /> : <MenuIcon size={20} />}
             </Button>
           </div>
+
 
           {/* Usuário */}
           {user && (
@@ -100,10 +101,9 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group
-                  ${
-                    pathname === item.href
-                      ? "bg-cyan-100 text-cyan-800 font-semibold"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-cyan-800"
+                  ${pathname === item.href
+                    ? "bg-cyan-100 text-cyan-800 font-semibold"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-cyan-800"
                   }`}
               >
                 {item.icon}
