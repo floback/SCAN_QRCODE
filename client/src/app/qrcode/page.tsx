@@ -105,19 +105,19 @@ export default function QrcodePage() {
             bgColor="bg-blue-600"
           />
           <InfoCard
-            title="TOTAL SCAN"
+            title="TOTAL ESCANEAMENTO"
             value={totalScans}
             icon={ScanLine}
             bgColor="bg-green-600"
           />
           <InfoCard
-            title="CODE PLUS SCANNING"
+            title="QR CODE MAIS ESCANEADO"
             value={mostScannedCodeName || "-"}
             icon={Trophy}
             bgColor="bg-yellow-500"
           />
           <InfoCard
-            title="SCANNING CITY"
+            title="CIDADE COM MAIOR VOLUME DE ESCANEAMENTO"
             value={topCity || "-"}
             icon={MapPin}
             bgColor="bg-green-700"

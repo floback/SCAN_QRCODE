@@ -47,22 +47,33 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
       <div className="flex flex-col h-full justify-between">
         {/* TOPO: Logo + Toggle */}
         <div>
-          <div className="flex justify-between items-center mb-6 px-1 relative">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={isSidebarOpen ? 70 : 40}
-              height={40}
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleSidebar}
-              className="rounded-full shadow-sm hover:bg-cyan-200 transition-colors"
-            >
-              {isSidebarOpen ? <MenuSquare size={20} /> : <MenuIcon size={20} />}
-            </Button>
-          </div>
+          {/* TOPO: Logo + Toggle */}
+<div className="flex flex-col items-center gap-3 mb-6">
+  {/* Logo */}
+  <Image
+    src="/logohdl.jpg"
+    alt="Logo"
+    width={isSidebarOpen ? 70 : 40}
+    height={60}
+    className="transition-all duration-300"
+  />
+
+  {/* Botão Toggle */}
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={toggleSidebar}
+    className="w-full rounded-md border-cyan-200 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 hover:text-cyan-900 shadow-sm transition-colors"
+  >
+    {isSidebarOpen ? (
+      <MenuSquare size={18} className="mr-2" />
+    ) : (
+      <MenuIcon size={18} className="mr-2" />
+    )}
+    {isSidebarOpen && "Fechar"}
+  </Button>
+</div>
+
 
 
           {/* Usuário */}
