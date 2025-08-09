@@ -9,6 +9,7 @@ import UserStatsCards from "./components/UserCards";
 import UserFilters from "./components/UserFilters";
 import UserStatusLegend from "./components/UserStatusLegend";
 import Sidebar from "@/components/SiderBarMenu";
+import SiderBarMenu from "@/components/SiderBarMenu";
 
 export default function UserManagementPage() {
   const {
@@ -40,13 +41,14 @@ export default function UserManagementPage() {
   });
 
   return (
-    <div className="flex bg-cyan-100 min-h-screen">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)} />
+    <div className="flex bg-cyan-100">
+      {/* Sidebar fixo */}
+      <SiderBarMenu isOpen={isSidebarOpen} onToggle={setIsSidebarOpen} />
 
+      {/* Conteúdo principal ajustável */}
       <main
-        className={`flex-1 transition-all duration-300 p-4 lg:p-6 ${
-          isSidebarOpen ? "ml-5" : "ml-16"
-        }`}
+        className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarOpen ? "ml-40" : "ml-20"
+          } min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-3 text-sm font-sans`}
       >
         <div className="bg-white rounded-3xl p-8 shadow-lg max-w-7xl mx-auto">
           <UserHeader />
@@ -56,7 +58,7 @@ export default function UserManagementPage() {
             totalAdmins={totalAdmins}
             totalNormalUsers={totalNormalUsers}
           />
-          
+
           <UserFilters
             search={search}
             setSearch={setSearch}
@@ -66,7 +68,7 @@ export default function UserManagementPage() {
             setIsCreateModalOpen={setIsCreateModalOpen}
             createUser={createUser}
           />
-        
+
 
           <UserTable
             users={users}

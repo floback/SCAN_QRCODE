@@ -7,7 +7,6 @@ import * as QRCode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateQrcodeDto } from './dto/create-qrcode.dto';
 import { AppType } from './dto/app-type.enum';
-import { Jimp } from 'jimp';
 import { proQrImg } from 'src/utils/proQrImg';
 
 
@@ -55,7 +54,7 @@ async createQRCode(
     }
   }
 
-  const backendBaseUrl = process.env.BASE_URL || 'https://c60d40c589e8.ngrok-free.app';
+  const backendBaseUrl = process.env.BASE_URL || 'https://61438a954b95.ngrok-free.app';
   const qrRedirectLink = `${backendBaseUrl}/scan/redirect/${uniqueCode}`;
 
   // Gera o buffer do QR Code

@@ -52,16 +52,16 @@ export default function QrcodePage() {
   } = useScanData();
 
   return (
-    <div className="flex bg-cyan-100 min-h-screen">
+    <div className="flex bg-cyan-100">
       {/* Sidebar fixo */}
-      <SiderBarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <SiderBarMenu isOpen={isSidebarOpen} onToggle={setIsSidebarOpen} />
 
       {/* Conteúdo principal ajustável */}
       <main
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "ml-2" : "ml-16"
-        } min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-6 text-sm font-sans`}
+        className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarOpen ? "ml-45" : "ml-20"
+          } min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-cyan-50 p-4 text-sm font-sans`}
       >
+
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {/* Formulário */}
           <QrcodeForm
@@ -90,7 +90,7 @@ export default function QrcodePage() {
 
         <ModalQrcode
           isOpen={showEditModal}
-          onClose={() => setShowEditModal(false)}
+          onClose={() => setShowEditModal(true)}
           loading={loadingModal}
           data={editData}
           setLoadingModal={setLoadingModal}
